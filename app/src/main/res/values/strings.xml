@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- App Name-->
+    <string name="app_name">HeartWise</string>
+    <string name="title_home">Measure</string>
+        <!-- Testings-->
+    <!--<string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>-->
+
+
+    <!-- On Boarding Walkthrough-->
+    <string name="screen1">Heartwise! Your Personal Health Companion</string>
+    <string name="screen2">All-in-One Health Monitoring</string>
+
+    <string name="screen1desc">Stay in tune with your hearts rhythm. Monitor your heart rate in real-time with precise measurements and insightful analysis.</string>
+    <string name="screen2desc">Track blood pressure sugar, activities. Gain control over your health with comprehensive tracking tools. </string>
+
+    <string name="startDesc">Stay in tune with your hearts rhythm. Monitor your heart rate in real-time with precise measurements and insightful analysis.
+
+    </string>
+</resources>
