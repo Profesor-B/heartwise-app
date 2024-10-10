@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "HeartWise"
 include(":app")
+include(":opencv")
