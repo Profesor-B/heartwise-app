@@ -2,7 +2,9 @@ package com.example.heartwise
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.media.Image
@@ -27,8 +29,10 @@ import org.opencv.android.Utils
 import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
+import org.opencv.core.MatOfInt
 import org.opencv.core.MatOfRect
 import org.opencv.core.Point
+import org.opencv.core.Rect
 import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
 import org.opencv.objdetect.CascadeClassifier
@@ -50,8 +54,8 @@ class CameraMonitor : AppCompatActivity() {
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
-    private var caseFile: File? = null
     private var faceDetector: CascadeClassifier? = null
+    private var eyeDetector: CascadeClassifier? = null
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -87,8 +91,9 @@ class CameraMonitor : AppCompatActivity() {
             requestPermissions()
         }
 
-        viewBinding.imageCaptureButton.setOnClickListener { takePhoto() }
-        viewBinding.videoCaptureButton.setOnClickListener { captureVideo() }
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this,"For better experience, please turn your phone into landscape mode.",Toast.LENGTH_LONG).show();
+        }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -96,11 +101,12 @@ class CameraMonitor : AppCompatActivity() {
         loadClassifier()
     }
 
-    private fun loadClassifier() {
-        val fileResource = resources.openRawResource(R.raw.haarcascade_frontalface_alt)
+    private fun loadModel(code:Int,name:String): File {
+        val fileResource = resources.openRawResource(code)
         val cascadeDir = getDir("cascade",Context.MODE_PRIVATE)
-        caseFile = File(cascadeDir,"haarcascade_frontalface_alt.xml")
-        val fos = FileOutputStream(caseFile)
+        val modelFile = File(cascadeDir,name)
+        val fos = FileOutputStream(modelFile)
+
         val buffer = ByteArray(4096)
         var bytesRead: Int
         while ((fileResource.read(buffer).also { bytesRead = it }) != -1) {
@@ -108,12 +114,23 @@ class CameraMonitor : AppCompatActivity() {
         }
         fileResource.close()
         fos.close()
+        cascadeDir.delete();
+        return modelFile
+    }
 
-        faceDetector = CascadeClassifier(caseFile!!.absolutePath)
+    private fun loadClassifier() {
+        val frontalFaceModel = loadModel(R.raw.haarcascade_frontalface_alt,"haarcascade_frontalface_alt.xml")
+        val eyeModel = loadModel(R.raw.haarcascade_eye,"haarcascade_eye.xml")
+
+        faceDetector = CascadeClassifier(frontalFaceModel.absolutePath)
+        eyeDetector = CascadeClassifier(eyeModel.absolutePath)
         if(faceDetector!!.empty()) {
             faceDetector = null;
         }
-        cascadeDir.delete();
+        if(eyeDetector!!.empty()) {
+            eyeDetector = null;
+        }
+
     }
 
 
@@ -167,7 +184,7 @@ class CameraMonitor : AppCompatActivity() {
                                 viewBinding.opencvImage.setImageBitmap(bitmap)
                             }
                         }
-                    }.loadClassifier(faceDetector)
+                    }.loadClassifier(faceDetector,eyeDetector)
                     )
                 }
 
@@ -202,6 +219,7 @@ class CameraMonitor : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     companion object {
@@ -217,9 +235,11 @@ class CameraMonitor : AppCompatActivity() {
     private class LightnessAnalyzer(private val listener:OpencvListener) : ImageAnalysis.Analyzer {
 
         private var faceDetector: CascadeClassifier? = null;
+        private var eyeDetector: CascadeClassifier? = null;
 
-        public fun loadClassifier(classifier: CascadeClassifier?): LightnessAnalyzer {
-            this.faceDetector = classifier;
+        public fun loadClassifier(faceClassifier: CascadeClassifier?,eyeClassifier: CascadeClassifier?): LightnessAnalyzer {
+            this.faceDetector = faceClassifier;
+            this.eyeDetector = eyeClassifier;
             return this
         }
 
@@ -308,7 +328,64 @@ class CameraMonitor : AppCompatActivity() {
                         Log.e("Detection","No classifier detected");
                     }
                     faceDetector?.detectMultiScale(rgbMatFrame,faceDetection,1.3,5)
-                    Log.i("Detection", faceDetection.toArray().size.toString())
+
+                    val faces = faceDetection.toArray();
+
+                    if(faces.size > 0) {
+                        val face = faces[0]
+                        val roi = Rect(face.x,face.y,face.width,face.height)
+                        val croppedFrame = Mat(rgbMatFrame,roi)
+                        val eyes = MatOfRect()
+                        eyeDetector?.detectMultiScale2(croppedFrame,eyes, MatOfInt(2),1.3,10)
+                        Log.i("Detection",eyes.toArray().size.toString())
+
+                        val detectedEyes = eyes.toArray();
+
+                        if(detectedEyes.size == 2) {
+                            // fix eye coordinates
+                            detectedEyes[0].x += face.x
+                            detectedEyes[1].x += face.x
+                            detectedEyes[0].y += face.y
+                            detectedEyes[1].y += face.y
+
+                            val leftEye = detectedEyes[0]
+                            val rightEye = detectedEyes[1]
+
+                            Imgproc.rectangle(
+                                rgbMatFrame,
+                                Point(leftEye.x.toDouble(),leftEye.y.toDouble()),
+                                Point(leftEye.x.toDouble()+leftEye.width.toDouble(),leftEye.y.toDouble() + leftEye.height.toDouble()),
+                                Scalar(255.0,0.0,0.0),
+                                4)
+
+                            Imgproc.rectangle(
+                                rgbMatFrame,
+                                Point(rightEye.x.toDouble(),rightEye.y.toDouble()),
+                                Point(rightEye.x.toDouble()+rightEye.width.toDouble(),rightEye.y.toDouble() + rightEye.height.toDouble()),
+                                Scalar(255.0,0.0,0.0),
+                                4)
+
+                            val leftEyeCenterX = Math.floorDiv(leftEye.x + leftEye.width,2)
+                            val leftEyeCenterY = Math.floorDiv(leftEye.y + leftEye.height,2)
+
+                            val rightEyeCenterX = Math.floorDiv(rightEye.x + rightEye.width,2)
+                            val rightEyeCenterY = Math.floorDiv(rightEye.y + rightEye.height,2)
+
+                            val centerX = Math.floorDiv(leftEyeCenterX + rightEyeCenterX,2)
+                            val centerY = Math.floorDiv(leftEyeCenterY + rightEyeCenterY,2)
+
+                            val middleRectX = Math.floorDiv(centerX - 100,2)
+                            val middleRectY = Math.floorDiv(centerY - 100,2)
+
+                            // roi frame
+                            // val roiForehead = Rect(middleRectX,middleRectY,middleRectX + 50,middleRectY + 50)
+
+                            // val roiFrame = Mat(rgbMatFrame,roiForehead)
+
+                            Log.i("Detection", "Mean: 0")
+
+                        }
+                    }
 
                     for(face in faceDetection.toArray()) {
                         Imgproc.rectangle(rgbMatFrame, Point(face.x.toDouble(),face.y.toDouble()),
