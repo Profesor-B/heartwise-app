@@ -228,7 +228,6 @@ class CameraMonitor : AppCompatActivity() {
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
                 Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
             ).toTypedArray()
     }
 
