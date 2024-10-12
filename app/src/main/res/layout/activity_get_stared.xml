@@ -9,7 +9,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="546dp"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:src="@drawable/screen1" />
 
@@ -31,6 +31,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/poppins_semibold"
         android:padding="10dp"
+        android:layout_marginTop="15dp"
         android:text="Continue"
         android:textSize="11sp"
         app:cornerRadius="12dp" />

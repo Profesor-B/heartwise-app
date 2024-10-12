@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/wrench_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/wrenchicon"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/maintenance_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Under Maintenance"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_below="@id/wrench_icon"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/explanation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="We are currently improving the app for a better experience."
+        android:textSize="14sp"
+        android:layout_below="@id/maintenance_text"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

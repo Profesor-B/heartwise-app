@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HeartWise">
         <activity
+            android:name=".MaintenanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="false" />
+        <activity
             android:name=".GetStarted"
             android:exported="false" />
         <activity
