@@ -15,7 +15,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     ViewPager slideViewPager;
     LinearLayout dotIndicator;
-    Button backButton, nextButton, skipButton;
+    Button backButton, nextButton, skipButton,cameraButton;
     TextView[] dots;
     ViewPagerAdapter viewPagerAdapter;
 
@@ -55,6 +55,16 @@ public class NavigationActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         nextButton = findViewById(R.id.nextButton);
         skipButton = findViewById(R.id.skipButton);
+        cameraButton = findViewById(R.id.cameraButton);
+
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(NavigationActivity.this,CameraMonitor.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
