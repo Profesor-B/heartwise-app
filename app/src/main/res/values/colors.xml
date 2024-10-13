@@ -13,5 +13,9 @@
     <color name="pink">#FD4452</color>
     <color name="pink_200">#C2405A</color>"
     <color name="grey">#808080</color>
+
+    <color name="bottom_navigation_colors">#D50000</color>
+
+
    <!-- <color name="lavender">#8692f7</color>-->
 </resources>

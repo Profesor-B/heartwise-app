@@ -31,7 +31,7 @@
         android:layout_marginTop="36dp"
         android:layout_marginEnd="30dp"
         android:gravity="center"
-        android:text="Our app helps you measure your heart rate, track your daily activities, and monitor your blood pressure history. Please provide some personal information to ensure accurate and personalized tracking."
+        android:text="Your trusted partner in monitoring your heart health, makes heart rate measurement simple, accurate, and insightful."
         android:textColor="#707070"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

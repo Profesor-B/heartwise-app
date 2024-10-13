@@ -30,7 +30,6 @@
         android:layout_below="@id/loading_text"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        android:progressDrawable="@drawable/progress_drawable"
         android:max="100"
         android:indeterminate="false"/>
 

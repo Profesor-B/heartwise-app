@@ -39,7 +39,7 @@ public class LoadingActivity extends AppCompatActivity {
                 }
 
                 // Once loading is complete, navigate to the MaintenanceActivity
-                Intent intent = new Intent(LoadingActivity.this, MaintenanceActivity.class);
+                Intent intent = new Intent(LoadingActivity.this, HomeActivityMain.class);
                 startActivity(intent);
                 finish();
             }

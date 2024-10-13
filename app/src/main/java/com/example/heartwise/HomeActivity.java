@@ -22,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Use HomeActivity.this instead of MainActivity.this
-                Intent intent = new Intent(HomeActivity.this, LoadingActivity.class);
+                Intent intent = new Intent(HomeActivity.this, HomeActivityMain.class);
                 startActivity(intent);
             }
         });
