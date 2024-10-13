@@ -4,32 +4,70 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Return home"
-            android:gravity="center"
-            android:layout_marginHorizontal="15dp"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start detection"
-            android:gravity="center"
-            android:layout_marginHorizontal="15dp"
-            />
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/opencv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:orientation="horizontal"
+        android:id="@+id/cameraView">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentBPM"
+                android:text="Current BPM: 0"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Return home"
+                android:gravity="center"
+                android:layout_marginHorizontal="15dp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start detection"
+                android:gravity="center"
+                android:layout_marginHorizontal="15dp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/opencvRectangleEnabled"
+                android:text="Enable Rectangle"
+                android:gravity="center"
+                android:layout_marginHorizontal="15dp"
+                />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/opencv_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/loadingView">
+        <ImageView
+            android:id="@+id/heart_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/heartwiselogo" />
+        <TextView
+            android:id="@+id/loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please rotate your phone to landscape mode..."
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"
+            />
+    </LinearLayout>
 </LinearLayout>
