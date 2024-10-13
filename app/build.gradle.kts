@@ -47,7 +47,6 @@ dependencies {
     implementation(libs.camera.video)
     implementation(libs.camera.view)
     implementation(libs.camera.extensions)
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -56,10 +55,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.activity)
-    implementation(project(":sdk"))
+    implementation(project(":opencv"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-
 }
