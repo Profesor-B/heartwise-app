@@ -3,17 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:gravity="center"
+    android:background="@color/white">
 
+    <!-- Start of Result Screen -->
+
+    <TextView
+        android:id="@+id/tvResultLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Result"
+        android:layout_alignParentTop="true"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvHeartRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="75 BPM"
+        android:gravity="right"
+        android:textSize="48sp"
+        android:textColor="#f44336"
+        android:layout_marginTop="64dp" />
+
+    <TextView
+        android:id="@+id/tvState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="State: Sitting"
+        android:layout_marginTop="240dp" />
+
+    <TextView
+        android:id="@+id/tvGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender: Female"
+        android:layout_marginTop="225dp" />
+
+    <TextView
+        android:id="@+id/tvAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age: 25"
+        android:layout_marginTop="255dp" />
+
+    <TextView
+        android:id="@+id/tvHeartRateState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Normal"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="300dp"
+        android:textColor="#4caf50" />
+
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="add your note here"
+        android:layout_marginTop="420dp"
+        android:background="@android:drawable/editbox_background"/>
+
+    <Button
+        android:id="@+id/btnSaveResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Results"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="460dp"
+        app:cornerRadius="15dp"
+        android:textSize="11sp"
+        android:backgroundTint="@color/pink_700"
+        android:fontFamily="sans-serif-medium"/>
+
+    <Button
+        android:id="@+id/btnSendEmergency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Emergency Alert"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="505dp"
+        app:cornerRadius="15dp"
+        android:textSize="11sp"
+        android:backgroundTint="@color/pink_700"
+        android:fontFamily="sans-serif-medium"/>
 
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
+
+    <!-- Bottom Navigation View -->
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation"/>
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="1dp" />
 
-    <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

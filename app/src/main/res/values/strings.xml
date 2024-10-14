@@ -20,4 +20,13 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <!--result screen -->
+    <string-array name="activity_types">
+        <item>Running</item>
+        <item>Exercising</item>
+        <item>Eating</item>
+        <item>Resting</item>
+        <item>Other</item>
+    </string-array>
+
 </resources>
