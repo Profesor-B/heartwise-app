@@ -1,5 +1,5 @@
 package com.example.heartwise;
-import com.example.heartwise.R; // Ensure this points to your generated R class
+
 
 
 import androidx.appcompat.app.AppCompatActivity;
