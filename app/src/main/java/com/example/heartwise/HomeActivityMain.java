@@ -5,9 +5,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.View;
+import android.widget.Button;
 
 public class HomeActivityMain extends AppCompatActivity {
 
+    private Button measureHeartRateButton;
+    private Button viewHistoryButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,31 @@ public class HomeActivityMain extends AppCompatActivity {
                 return true;
             }
             return false; // Return false if none of the conditions matched
+        });
+
+
+        // Initialize buttons
+        measureHeartRateButton = findViewById(R.id.measureHeartRateButton);
+        viewHistoryButton = findViewById(R.id.viewHistoryButton);
+
+        // Set onClick listener for Measure Heart Rate button
+        measureHeartRateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to Measure Heart Rate Activity
+                Intent intent = new Intent(HomeActivityMain.this, CameraMonitor.class);
+                startActivity(intent);
+            }
+        });
+
+        // Set onClick listener for View History button
+        viewHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to History Activity
+                Intent intent = new Intent(HomeActivityMain.this, HistoryActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }
