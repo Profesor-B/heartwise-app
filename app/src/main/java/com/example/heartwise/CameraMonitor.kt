@@ -9,8 +9,11 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.media.Image
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import android.view.Surface
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -78,7 +81,6 @@ class CameraMonitor : AppCompatActivity() {
             }
         }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityCameraMonitorBinding.inflate(layoutInflater)
@@ -92,7 +94,10 @@ class CameraMonitor : AppCompatActivity() {
         }
 
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            viewBinding.cameraView.visibility = View.GONE;
             Toast.makeText(this,"For better experience, please turn your phone into landscape mode.",Toast.LENGTH_LONG).show();
+        } else {
+            viewBinding.cameraView.visibility = View.VISIBLE;
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -133,15 +138,6 @@ class CameraMonitor : AppCompatActivity() {
 
     }
 
-
-    private fun takePhoto() {
-        Toast.makeText(this,"Take photo not implemented yet.",Toast.LENGTH_SHORT).show();
-    }
-
-    private fun captureVideo() {
-        Toast.makeText(this,"Video capture not implemented yet.",Toast.LENGTH_SHORT).show();
-    }
-
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -154,7 +150,7 @@ class CameraMonitor : AppCompatActivity() {
             val opencvAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, LightnessAnalyzer { _, bitmap ->
+                    it.setAnalyzer(cameraExecutor, LightnessAnalyzer { bpm, bitmap ->
                         runOnUiThread {
                             try {
                                 val rotation = when (viewBinding.opencvImage.display.rotation) {
@@ -180,11 +176,14 @@ class CameraMonitor : AppCompatActivity() {
                                     )
                                     viewBinding.opencvImage.setImageBitmap(rotatedBitmap)
                                 }
+                                if(bpm.isNotEmpty()){
+                                    viewBinding.currentBPM.text = bpm;
+                                }
                             } catch (ex: Exception) {
                                 viewBinding.opencvImage.setImageBitmap(bitmap)
                             }
                         }
-                    }.loadClassifier(faceDetector,eyeDetector)
+                    }.loadClassifier(faceDetector,eyeDetector).setRectangleListener(this,viewBinding.opencvRectangleEnabled)
                     )
                 }
 
@@ -235,11 +234,25 @@ class CameraMonitor : AppCompatActivity() {
 
         private var faceDetector: CascadeClassifier? = null;
         private var eyeDetector: CascadeClassifier? = null;
+        private var enableRectangle: Boolean = false;
 
         public fun loadClassifier(faceClassifier: CascadeClassifier?,eyeClassifier: CascadeClassifier?): LightnessAnalyzer {
             this.faceDetector = faceClassifier;
             this.eyeDetector = eyeClassifier;
             return this
+        }
+
+        public fun setRectangleListener(context: Context,btn: Button): LightnessAnalyzer {
+            btn.setOnClickListener {
+                if(enableRectangle) {
+                    enableRectangle = false;
+                    Toast.makeText(context,"Disabling OPENCV Rectangle",Toast.LENGTH_SHORT).show()
+                } else {
+                    enableRectangle = true;
+                    Toast.makeText(context,"Enabling OPENCV Rectangle",Toast.LENGTH_SHORT).show()
+                }
+            }
+            return this;
         }
 
         fun Image.yuvToRgba(): Mat {
@@ -317,91 +330,137 @@ class CameraMonitor : AppCompatActivity() {
 
         @androidx.annotation.OptIn(ExperimentalGetImage::class)
         override fun analyze(image: ImageProxy) {
+            var message = "";
             image.image?.let {
                 if (it.format == ImageFormat.YUV_420_888 && it.planes.size == 3) {
                     val rgbMatFrame = it.yuvToRgba()
-                    val grayFrame = Mat()
-                    // Imgproc.cvtColor(rgbMatFrame,grayFrame,6)
-                    val faceDetection = MatOfRect();
-                    if(faceDetector == null) {
-                        Log.e("Detection","No classifier detected");
-                    }
-                    faceDetector?.detectMultiScale(rgbMatFrame,faceDetection,1.3,5)
-
-                    val faces = faceDetection.toArray();
-
-                    if(faces.size > 0) {
-                        val face = faces[0]
-                        val roi = Rect(face.x,face.y,face.width,face.height)
-                        val croppedFrame = Mat(rgbMatFrame,roi)
-                        val eyes = MatOfRect()
-                        eyeDetector?.detectMultiScale2(croppedFrame,eyes, MatOfInt(2),1.3,10)
-                        Log.i("Detection",eyes.toArray().size.toString())
-
-                        val detectedEyes = eyes.toArray();
-
-                        if(detectedEyes.size == 2) {
-                            // fix eye coordinates
-                            detectedEyes[0].x += face.x
-                            detectedEyes[1].x += face.x
-                            detectedEyes[0].y += face.y
-                            detectedEyes[1].y += face.y
-
-                            val leftEye = detectedEyes[0]
-                            val rightEye = detectedEyes[1]
-
-                            Imgproc.rectangle(
-                                rgbMatFrame,
-                                Point(leftEye.x.toDouble(),leftEye.y.toDouble()),
-                                Point(leftEye.x.toDouble()+leftEye.width.toDouble(),leftEye.y.toDouble() + leftEye.height.toDouble()),
-                                Scalar(255.0,0.0,0.0),
-                                4)
-
-                            Imgproc.rectangle(
-                                rgbMatFrame,
-                                Point(rightEye.x.toDouble(),rightEye.y.toDouble()),
-                                Point(rightEye.x.toDouble()+rightEye.width.toDouble(),rightEye.y.toDouble() + rightEye.height.toDouble()),
-                                Scalar(255.0,0.0,0.0),
-                                4)
-
-                            val leftEyeCenterX = Math.floorDiv(leftEye.x + leftEye.width,2)
-                            val leftEyeCenterY = Math.floorDiv(leftEye.y + leftEye.height,2)
-
-                            val rightEyeCenterX = Math.floorDiv(rightEye.x + rightEye.width,2)
-                            val rightEyeCenterY = Math.floorDiv(rightEye.y + rightEye.height,2)
-
-                            val centerX = Math.floorDiv(leftEyeCenterX + rightEyeCenterX,2)
-                            val centerY = Math.floorDiv(leftEyeCenterY + rightEyeCenterY,2)
-
-                            val middleRectX = Math.floorDiv(centerX - 100,2)
-                            val middleRectY = Math.floorDiv(centerY - 100,2)
-
-                            // roi frame
-                            // val roiForehead = Rect(middleRectX,middleRectY,middleRectX + 50,middleRectY + 50)
-
-                            // val roiFrame = Mat(rgbMatFrame,roiForehead)
-
-                            Log.i("Detection", "Mean: 0")
-
+                    if(!rgbMatFrame.empty()) {
+                        val faceDetection = MatOfRect();
+                        if (faceDetector == null) {
+                            Log.e("Detection", "No classifier detected");
                         }
-                    }
+                        faceDetector?.detectMultiScale(rgbMatFrame, faceDetection, 1.3, 5)
 
-                    for(face in faceDetection.toArray()) {
-                        Imgproc.rectangle(rgbMatFrame, Point(face.x.toDouble(),face.y.toDouble()),
-                            Point(face.x.toDouble() + face.width.toDouble(),face.y.toDouble() + face.height.toDouble()), Scalar
-                        (255.0,0.0,0.0),4
+                        val faces = faceDetection.toArray();
+
+                        if (faces.isNotEmpty()) {
+                            val face = faces[0]
+                            val roi = Rect(face.x, face.y, face.width, face.height)
+                            val croppedFrame = Mat(rgbMatFrame, roi)
+                            if (!croppedFrame.empty()) {
+                                val eyes = MatOfRect()
+                                eyeDetector?.detectMultiScale2(
+                                    croppedFrame,
+                                    eyes,
+                                    MatOfInt(2),
+                                    1.3,
+                                    10
+                                )
+                                Log.i("Detection", eyes.toArray().size.toString())
+
+                                val detectedEyes = eyes.toArray();
+
+                                if (detectedEyes.size == 2) {
+                                    // fix eye coordinates
+                                    detectedEyes[0].x += face.x
+                                    detectedEyes[1].x += face.x
+                                    detectedEyes[0].y += face.y
+                                    detectedEyes[1].y += face.y
+
+                                    val leftEye = detectedEyes[0]
+                                    val rightEye = detectedEyes[1]
+
+                                    if (enableRectangle) {
+                                        Imgproc.rectangle(
+                                            rgbMatFrame,
+                                            Point(leftEye.x.toDouble(), leftEye.y.toDouble()),
+                                            Point(
+                                                leftEye.x.toDouble() + leftEye.width.toDouble(),
+                                                leftEye.y.toDouble() + leftEye.height.toDouble()
+                                            ),
+                                            Scalar(255.0, 0.0, 0.0),
+                                            4
+                                        )
+
+                                        Imgproc.rectangle(
+                                            rgbMatFrame,
+                                            Point(rightEye.x.toDouble(), rightEye.y.toDouble()),
+                                            Point(
+                                                rightEye.x.toDouble() + rightEye.width.toDouble(),
+                                                rightEye.y.toDouble() + rightEye.height.toDouble()
+                                            ),
+                                            Scalar(255.0, 0.0, 0.0),
+                                            4
+                                        )
+                                    }
+                                    val leftEyeCenterX = Math.floorDiv(leftEye.x + leftEye.width, 2)
+                                    val leftEyeCenterY =
+                                        Math.floorDiv(leftEye.y + leftEye.height, 2)
+
+                                    val rightEyeCenterX =
+                                        Math.floorDiv(rightEye.x + rightEye.width, 2)
+                                    val rightEyeCenterY =
+                                        Math.floorDiv(rightEye.y + rightEye.height, 2)
+
+                                    val centerX = Math.floorDiv(leftEyeCenterX + rightEyeCenterX, 2)
+                                    val centerY = Math.floorDiv(leftEyeCenterY + rightEyeCenterY, 2)
+
+                                    val middleRectX = Math.floorDiv(centerX - 100, 2)
+                                    val middleRectY = Math.floorDiv(centerY - 100, 2)
+
+                                    // roi frame
+                                    val roiForehead = Rect(
+                                        middleRectX,
+                                        middleRectY,
+                                        middleRectX + 50,
+                                        middleRectY + 50
+                                    )
+                                    if (!roiForehead.empty()) {
+                                        val roiFrame = Mat(rgbMatFrame, roiForehead)
+                                        if (!roiFrame.empty()) {
+                                            val roiFiltered = Mat();
+                                            Imgproc.cvtColor(
+                                                roiFrame,
+                                                roiFiltered,
+                                                Imgproc.COLOR_BGR2HSV
+                                            );
+                                            if (!roiFiltered.empty()) {
+                                                val mean = roiFiltered.get(0, 0)[0];
+                                                Log.i("BPM rate", "Mean: $mean");
+                                                message = "Current BPM: $mean";
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        if (enableRectangle) {
+                            for (face in faceDetection.toArray()) {
+                                Imgproc.rectangle(
+                                    rgbMatFrame, Point(face.x.toDouble(), face.y.toDouble()),
+                                    Point(
+                                        face.x.toDouble() + face.width.toDouble(),
+                                        face.y.toDouble() + face.height.toDouble()
+                                    ), Scalar
+                                        (255.0, 0.0, 0.0), 4
+                                )
+                            }
+                        }
+
+                        // Core.flip(rgbMatFrame,rgbMatFrame,1)
+
+                        // convert into bitmap and send it to the listener
+                        val bmp = Bitmap.createBitmap(
+                            rgbMatFrame.cols(),
+                            rgbMatFrame.rows(),
+                            Bitmap.Config.ARGB_8888
                         )
+
+                        Utils.matToBitmap(rgbMatFrame, bmp)
+
+                        listener(message, bmp)
                     }
-
-                    // Core.flip(rgbMatFrame,rgbMatFrame,1)
-
-                    // convert into bitmap and send it to the listener
-                    val bmp = Bitmap.createBitmap(rgbMatFrame.cols(), rgbMatFrame.rows(), Bitmap.Config.ARGB_8888)
-                    val message = "Frame"
-
-                    Utils.matToBitmap(rgbMatFrame, bmp)
-
-                    listener(message, bmp)
                 }
             }
 
