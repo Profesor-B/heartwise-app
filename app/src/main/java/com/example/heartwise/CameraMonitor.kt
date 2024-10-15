@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.media.Image
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Surface
 import android.view.View
@@ -27,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.room.Room
 import com.example.heartwise.databinding.ActivityCameraMonitorBinding
 import org.opencv.android.Utils
+import org.opencv.core.CvException
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.MatOfInt
@@ -40,6 +42,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -47,7 +50,7 @@ import java.util.concurrent.Executors
 typealias LumaListener = (luma: Double) -> Unit
 typealias OpencvListener = (message: String, bitmap: Bitmap) -> Unit
 
-class CameraMonitor : AppCompatActivity() {
+class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var viewBinding: ActivityCameraMonitorBinding
 
@@ -57,6 +60,10 @@ class CameraMonitor : AppCompatActivity() {
 
     private var faceDetector: CascadeClassifier? = null
     private var eyeDetector: CascadeClassifier? = null
+
+    private var isSpeak = false;
+
+    private var tts: TextToSpeech? = null;
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -78,6 +85,8 @@ class CameraMonitor : AppCompatActivity() {
                 startCamera()
             }
         }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,6 +118,8 @@ class CameraMonitor : AppCompatActivity() {
             )
 
             bpmResultDao!!.insertData(bpmResult)
+            speakOut("measurement complete, please wait");
+            tts?.playSilentUtterance(1500, TextToSpeech.QUEUE_ADD,null);
 
             startActivity(Intent(applicationContext,HomeActivityMain::class.java))
         }
@@ -128,6 +139,8 @@ class CameraMonitor : AppCompatActivity() {
 
         System.loadLibrary("opencv_java4")
         loadClassifier()
+
+        tts = TextToSpeech(this,this)
     }
 
     private fun loadModel(code:Int,name:String): File {
@@ -202,6 +215,14 @@ class CameraMonitor : AppCompatActivity() {
                                 }
                                 if(bpm.isNotEmpty()){
                                     viewBinding.currentBPM.text = bpm;
+                                    if(isSpeak){
+                                        speakOut("please relax your heart for a moment.");
+                                        tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null);
+                                        speakOut("breath normally.");
+                                        tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null);
+                                        isSpeak = false;
+                                    }
+
                                 }
                             } catch (ex: Exception) {
                                 viewBinding.opencvImage.setImageBitmap(bitmap)
@@ -243,6 +264,25 @@ class CameraMonitor : AppCompatActivity() {
         super.onDestroy()
         cameraExecutor.shutdown()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        if(tts != null) {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+    }
+
+    override fun onInit(status: Int) {
+        if( status == TextToSpeech.SUCCESS) {
+            val result = tts!!.setLanguage(Locale.US)
+            isSpeak = true;
+            if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS","Language not supported")
+            }
+
+        }
+    }
+
+    private fun speakOut(text:String) {
+        tts!!.speak(text,TextToSpeech.QUEUE_ADD,null,"")
     }
 
     companion object {
@@ -361,6 +401,8 @@ class CameraMonitor : AppCompatActivity() {
                 if (it.format == ImageFormat.YUV_420_888 && it.planes.size == 3) {
                     val rgbMatFrame = it.yuvToRgba()
                     if(!rgbMatFrame.empty()) {
+                        try {
+
                         val faceDetection = MatOfRect();
                         if (faceDetector == null) {
                             Log.e("Detection", "No classifier detected");
@@ -486,8 +528,11 @@ class CameraMonitor : AppCompatActivity() {
                         )
 
                         Utils.matToBitmap(rgbMatFrame, bmp)
+                            listener(message, bmp)
+                        } catch (e: CvException){
 
-                        listener(message, bmp)
+                        }
+
                     }
                 }
             }
