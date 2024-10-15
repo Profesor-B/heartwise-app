@@ -55,7 +55,7 @@ public class NavigationActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         nextButton = findViewById(R.id.nextButton);
         skipButton = findViewById(R.id.skipButton);
-        cameraButton = findViewById(R.id.cameraButton);
+/*        cameraButton = findViewById(R.id.cameraButton);
 
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +64,7 @@ public class NavigationActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

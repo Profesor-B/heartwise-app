@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:background="@color/pink_200"
         android:id="@+id/cameraView">
         <LinearLayout
             android:layout_width="wrap_content"
@@ -25,6 +26,10 @@
                 android:layout_height="wrap_content"
                 android:text="Return home"
                 android:gravity="center"
+                app:cornerRadius="15dp"
+                android:textSize="11sp"
+                android:backgroundTint="@color/pink_700"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginHorizontal="15dp"
                 />
             <Button
@@ -32,6 +37,10 @@
                 android:layout_height="wrap_content"
                 android:text="Start detection"
                 android:gravity="center"
+                app:cornerRadius="15dp"
+                android:textSize="11sp"
+                android:backgroundTint="@color/pink_700"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginHorizontal="15dp"
                 />
             <Button
@@ -40,9 +49,14 @@
                 android:id="@+id/opencvRectangleEnabled"
                 android:text="Enable Rectangle"
                 android:gravity="center"
+                app:cornerRadius="15dp"
+                android:textSize="11sp"
+                android:backgroundTint="@color/pink_700"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginHorizontal="15dp"
                 />
         </LinearLayout>
+
         <ImageView
             android:id="@+id/opencv_image"
             android:layout_width="match_parent"
@@ -55,7 +69,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:id="@+id/loadingView">
+        android:id="@+id/loadingView"
+        android:background="@color/pink_200">
         <ImageView
             android:id="@+id/heart_icon"
             android:layout_width="100dp"

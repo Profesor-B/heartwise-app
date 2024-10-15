@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/pink_200"
     tools:context=".MainActivity">
 
     <!-- Heart Icon -->
@@ -27,13 +27,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
+        android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:fontFamily="@font/alatsi"
         android:text="Your trusted partner in monitoring your heart health, makes heart rate measurement simple, accurate, and insightful."
-        android:textColor="@color/grey"
-        android:textSize="19sp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +43,7 @@
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="150dp"
         android:backgroundTint="@color/pink"
         android:fontFamily="sans-serif-medium"
         android:paddingLeft="50dp"
@@ -64,13 +63,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Welcome to Heartwise! 👋"
+        android:gravity="center"
         android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/heart_icon" />
+
+    <ImageView
+        android:id="@+id/appTitle"
+        android:layout_width="222dp"
+        android:layout_height="42dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="310dp"
+        android:background="@color/pink_200"
+        android:src="@drawable/heartwisetext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Description Text -->
 

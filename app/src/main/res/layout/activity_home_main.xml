@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="24dp"
+    android:padding="15dp"
     android:background="@color/pink_200">
 
 
@@ -87,6 +87,30 @@
         android:textSize="20sp" />
     </RelativeLayout>
 
+<!--    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".MainActivity">
+
+        &lt;!&ndash; Other UI components for blood pressure monitoring &ndash;&gt;
+
+&lt;!&ndash;        &lt;!&ndash; Settings Button &ndash;&gt;&ndash;&gt;
+&lt;!&ndash;        <Button&ndash;&gt;
+&lt;!&ndash;            android:id="@+id/openSettingsButton"&ndash;&gt;
+&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;
+&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;
+&lt;!&ndash;            android:text="Settings"&ndash;&gt;
+&lt;!&ndash;            android:layout_gravity="center_horizontal"&ndash;&gt;
+
+&lt;!&ndash;            app:cornerRadius="15dp"&ndash;&gt;
+&lt;!&ndash;            android:textSize="11sp"&ndash;&gt;
+&lt;!&ndash;            android:layout_marginTop="550dp" />&ndash;&gt;
+
+    </LinearLayout>-->
     <Button
         android:id="@+id/measureHeartRateButton"
         android:layout_width="wrap_content"

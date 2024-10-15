@@ -6,109 +6,107 @@
     android:orientation="vertical"
     android:padding="15dp"
     android:gravity="center"
-    android:background="@color/white">
+    android:background="@color/pink_200">
 
     <!-- Start of Result Screen -->
 
     <TextView
-        android:id="@+id/tvResultLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Result"
-        android:layout_alignParentTop="true"
-        android:textSize="20sp"
-        android:layout_gravity="center"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvHeartRate"
+        android:id="@+id/heart_rate_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="75 BPM"
-        android:gravity="right"
-        android:textSize="48sp"
-        android:textColor="#f44336"
-        android:layout_marginTop="64dp" />
-
-    <TextView
-        android:id="@+id/tvState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="State: Sitting"
-        android:layout_marginTop="240dp" />
-
-    <TextView
-        android:id="@+id/tvGender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Gender: Female"
-        android:layout_marginTop="225dp" />
-
-    <TextView
-        android:id="@+id/tvAge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Age: 25"
-        android:layout_marginTop="255dp" />
-
-    <TextView
-        android:id="@+id/tvHeartRateState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Normal"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="300dp"
-        android:textColor="#4caf50" />
-
-    <EditText
-        android:id="@+id/etNote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="add your note here"
-        android:layout_marginTop="420dp"
-        android:background="@android:drawable/editbox_background"/>
+        android:text="Heart Rate History"
+        android:textColor="@color/grey"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"/>
 
     <Button
-        android:id="@+id/btnSaveResults"
-        android:layout_width="match_parent"
+        android:id="@+id/day_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Results"
+        android:layout_below="@id/heart_rate_header"
+        android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/grey"
+        android:text="Day"
+        android:textSize="11sp"
+        android:backgroundTint="@color/pink_700"
+        android:fontFamily="sans-serif-medium"
+        app:cornerRadius="8dp"/>
+
+    <Button
+        android:id="@+id/week_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/day_button"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/day_button"
+        android:background="@color/red"
+        android:textSize="11sp"
+        android:backgroundTint="@color/pink_700"
+        android:fontFamily="sans-serif-medium"
+        app:cornerRadius="8dp"
+        android:text="Week" />
+
+    <TextView
+        android:id="@+id/selected_period"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="October 1 - October 7"
+        android:textSize="18sp"
+        android:layout_below="@id/day_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/avg_bpm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Average: 50 BPM"
+        android:layout_below="@id/selected_period"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/max_bpm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Max: 110 BPM"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/selected_period"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"/>
+
+    <!-- Placeholder for the graph component -->
+
+    <Button
+        android:id="@+id/export_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EXPORT HISTORY"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="5dp"
         app:cornerRadius="15dp"
         android:textSize="11sp"
         android:backgroundTint="@color/pink_700"
         android:fontFamily="sans-serif-medium"/>
-
-    <Button
-        android:id="@+id/btnSendEmergency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send Emergency Alert"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="505dp"
-        app:cornerRadius="15dp"
-        android:textSize="11sp"
-        android:backgroundTint="@color/pink_700"
-        android:fontFamily="sans-serif-medium"/>
-
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
-
-    <!-- Bottom Navigation View -->
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation"
-        android:layout_marginBottom="1dp" />
+        android:layout_above="@id/bottom_navigation"/>
+    <!-- Bottom Navigation View -->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemIconTint="@color/bottom_navigation_colors"
-        app:itemTextColor="@color/bottom_navigation_colors"
+        android:background="@color/pink_200"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:menu="@menu/buttom_navigation_menu"/>
 </RelativeLayout>
