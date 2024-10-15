@@ -90,7 +90,7 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 
 def openCVersionName = "4.10.0"
 def openCVersionCode = ((4 * 100 + 10) * 100 + 0) * 10 + 0
@@ -119,9 +119,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString() // Or "1.8" if you prefer Java 8
     }
     buildTypes {
         debug {

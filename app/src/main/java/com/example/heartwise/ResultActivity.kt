@@ -1,52 +1,47 @@
-package com.example.heartwise;
+package com.example.heartwise
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.heartwise.ui.theme.HeartWiseTheme
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-public class ResultActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result);
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        // Set Home as the selected default item
-        bottomNavigationView.setSelectedItemId(R.id.nav_result);
-
-        // Set the listener for navigation item selection
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_home) {
-                // Navigate to the Home screen
-                startActivity(new Intent(getApplicationContext(), HomeActivityMain.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (item.getItemId() == R.id.nav_result) {
-                // Navigate to the Result screen
-                startActivity(new Intent(getApplicationContext(), ResultActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (item.getItemId() == R.id.nav_measure) {
-                // Navigate to the Measure Heart Rate screen
-                startActivity(new Intent(getApplicationContext(), CameraMonitor.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (item.getItemId() == R.id.nav_activity_history) {
-                // Navigate to the Activity History screen
-                startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (item.getItemId() == R.id.nav_settings) {
-                // Navigate to the Settings screen
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
+class ResultActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            HeartWiseTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
-            return false; // Return false if none of the conditions matched
-        });
+        }
+    }
+}
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    HeartWiseTheme {
+        Greeting("Android")
     }
 }

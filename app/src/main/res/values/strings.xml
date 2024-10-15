@@ -28,5 +28,6 @@
         <item>Resting</item>
         <item>Other</item>
     </string-array>
+    <string name="title_activity_result">ResultActivity</string>
 
 </resources>

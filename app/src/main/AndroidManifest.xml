@@ -19,13 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HeartWise">
         <activity
+            android:name=".ResultActivity"
+            android:exported="false"
+            android:label="@string/title_activity_result"
+            android:theme="@style/Theme.HeartWise" />
+        <activity
             android:name=".ActivityAdapter"
             android:exported="false" />
         <activity
             android:name=".HistoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ResultActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
