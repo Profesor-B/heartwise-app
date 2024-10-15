@@ -7,7 +7,7 @@
     card_view:cardElevation="4dp"
     card_view:cardCornerRadius="8dp"
     android:layout_marginBottom="12dp">
-
+    <!--Start of item bloodpressure -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

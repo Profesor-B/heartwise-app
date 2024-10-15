@@ -8,7 +8,7 @@
     android:gravity="center"
     android:background="@color/pink_200">
 
-    <!-- App Appearance Section -->
+    <!-- Activity History Section -->
     <RelativeLayout
         android:layout_width="500dp"
         android:layout_height="200dp">

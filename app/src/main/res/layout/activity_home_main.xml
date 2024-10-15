@@ -9,7 +9,7 @@
     android:padding="15dp"
     android:background="@color/pink_200">
 
-
+<!--Start of Home Main-->
     <ImageView
         android:id="@+id/appTitle"
         android:layout_width="350dp"

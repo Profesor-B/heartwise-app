@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="15dp"
     android:background="@color/pink_200">
-    <!-- Start of settings/main preview-->
+    <!-- Start of settings preview-->
 
     <!-- XML Layout for the Settings UI -->
     <LinearLayout

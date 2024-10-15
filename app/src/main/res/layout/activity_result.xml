@@ -11,6 +11,7 @@
     android:gravity="center"
     android:background="@color/pink_200"
     tools:context=".ResultActivity">
+    <!--Start of Result Screen-->
 
     <!-- XML Layout for the Settings UI -->
     <LinearLayout
