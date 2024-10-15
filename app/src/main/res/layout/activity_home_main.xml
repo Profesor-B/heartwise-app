@@ -10,24 +10,12 @@
     android:background="@color/pink_200">
 
 
-<!--    <TextView-->
-<!--        android:id="@+id/appTitle"-->
-<!--        android:layout_width ="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:text="HeartWise"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="24sp"-->
-<!--        android:padding="8dp"-->
-<!--        app:cornerRadius="15dp"-->
-<!--        android:fontFamily="sans-serif-medium"-->
-<!--        android:textStyle="bold" />-->
     <ImageView
         android:id="@+id/appTitle"
-        android:layout_width="222dp"
-        android:layout_height="42dp"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@color/pink_200"
         android:src="@drawable/heartwisetext"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,9 +27,9 @@
 
     <ImageView
         android:id="@+id/heart_icon"
-        android:layout_width="378dp"
-        android:layout_height="83dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="390dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="43dp"
         android:src="@drawable/heartwiselogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -87,30 +75,6 @@
         android:textSize="20sp" />
     </RelativeLayout>
 
-<!--    <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".MainActivity">
-
-        &lt;!&ndash; Other UI components for blood pressure monitoring &ndash;&gt;
-
-&lt;!&ndash;        &lt;!&ndash; Settings Button &ndash;&gt;&ndash;&gt;
-&lt;!&ndash;        <Button&ndash;&gt;
-&lt;!&ndash;            android:id="@+id/openSettingsButton"&ndash;&gt;
-&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;
-&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;
-&lt;!&ndash;            android:text="Settings"&ndash;&gt;
-&lt;!&ndash;            android:layout_gravity="center_horizontal"&ndash;&gt;
-
-&lt;!&ndash;            app:cornerRadius="15dp"&ndash;&gt;
-&lt;!&ndash;            android:textSize="11sp"&ndash;&gt;
-&lt;!&ndash;            android:layout_marginTop="550dp" />&ndash;&gt;
-
-    </LinearLayout>-->
     <Button
         android:id="@+id/measureHeartRateButton"
         android:layout_width="wrap_content"
@@ -124,7 +88,6 @@
         android:fontFamily="sans-serif-medium"
         android:text="Measure Heart Rate"
         tools:ignore="NotSibling" />
-
 
     <Button
         android:id="@+id/viewHistoryButton"

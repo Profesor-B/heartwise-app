@@ -8,7 +8,43 @@
     android:gravity="center"
     android:background="@color/pink_200">
 
+    <!-- App Appearance Section -->
+    <RelativeLayout
+        android:layout_width="500dp"
+        android:layout_height="200dp">
 
+        <ImageView
+            android:id="@+id/appTitle"
+            android:layout_width="380dp"
+            android:layout_height="40dp"
+            android:background="@color/pink_200"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/heartwisetext" />
+
+        <!-- Heart BPM Section -->
+
+        <ImageView
+            android:id="@+id/heart_icon"
+            android:layout_width="380dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="43dp"
+            android:src="@drawable/heartwiselogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_act_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="135dp"
+            android:backgroundTint="@color/pink_700"
+            android:fontFamily="sans-serif-medium"
+            android:text="Activity History"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+    </RelativeLayout>
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
     <FrameLayout
         android:id="@+id/frameLayout"

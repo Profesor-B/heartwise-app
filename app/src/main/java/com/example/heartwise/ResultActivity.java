@@ -13,10 +13,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import java.util.ArrayList;
 
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ResultActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

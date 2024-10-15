@@ -53,6 +53,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/poppins_semibold"
             android:text="Skip"
+
             android:textSize="11sp"
             app:cornerRadius="12dp" />
     </LinearLayout>

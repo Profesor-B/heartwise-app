@@ -1,98 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
     android:gravity="center"
-    android:background="@color/pink_200">
+    android:background="@color/pink_200"
+    tools:context=".ResultActivity">
 
-    <!-- Start of Result Screen -->
+    <!-- XML Layout for the Settings UI -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/pink_200"
+        android:padding="15dp">
 
-    <TextView
-        android:id="@+id/heart_rate_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Heart Rate History"
-        android:textColor="@color/grey"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true"/>
+        <!-- App Appearance Section -->
 
-    <Button
-        android:id="@+id/day_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/heart_rate_header"
-        android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@color/grey"
-        android:text="Day"
-        android:textSize="11sp"
-        android:backgroundTint="@color/pink_700"
-        android:fontFamily="sans-serif-medium"
-        app:cornerRadius="8dp"/>
+        <RelativeLayout
+            android:layout_width="350dp"
+            android:layout_height="150dp">
 
-    <Button
-        android:id="@+id/week_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/day_button"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/day_button"
-        android:background="@color/red"
-        android:textSize="11sp"
-        android:backgroundTint="@color/pink_700"
-        android:fontFamily="sans-serif-medium"
-        app:cornerRadius="8dp"
-        android:text="Week" />
+            <ImageView
+                android:id="@+id/appTitle"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@color/pink_200"
+                android:src="@drawable/heartwisetext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/selected_period"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="October 1 - October 7"
-        android:textSize="18sp"
-        android:layout_below="@id/day_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+            <!-- Heart BPM Section -->
 
-    <TextView
-        android:id="@+id/avg_bpm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Average: 50 BPM"
-        android:layout_below="@id/selected_period"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="16dp"/>
+            <ImageView
+                android:id="@+id/heart_icon"
+                android:layout_width="390dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="28dp"
+                android:src="@drawable/heartwiselogo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/max_bpm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Max: 110 BPM"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/selected_period"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="16dp"/>
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="120dp"
+                android:backgroundTint="@color/pink_700"
+                android:fontFamily="sans-serif-medium"
+                android:text="Blood Pressure Result"
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
-    <!-- Placeholder for the graph component -->
 
-    <Button
-        android:id="@+id/export_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EXPORT HISTORY"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
-        android:layout_marginTop="5dp"
-        app:cornerRadius="15dp"
-        android:textSize="11sp"
-        android:backgroundTint="@color/pink_700"
-        android:fontFamily="sans-serif-medium"/>
-    <!-- FrameLayout to Hold Different Fragments for Each Screen -->
+        </RelativeLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="30dp">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="100dp"
+                android:clipToPadding="false"
+                android:padding="30dp"
+                android:scrollbars="vertical" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
@@ -104,9 +97,26 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="646dp"
         android:background="@color/pink_200"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/buttom_navigation_menu"/>
-</RelativeLayout>
+
+    <!-- Floating Action Button (Optional) -->
+    <!--
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_measurement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/add_measurement"
+        android:src="@drawable/ic_add"
+        app:fabSize="normal"
+        app:layout_anchor="@id/recyclerView_history"
+        app:layout_anchorGravity="bottom|end"
+        android:layout_margin="16dp" />
+    -->
+    <!-- FrameLayout to Hold Different Fragments for Each Screen -->
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,25 +1,48 @@
 package com.example.heartwise;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceFragmentCompat;
-import android.content.SharedPreferences;
+
+import android.content.DialogInterface;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-import androidx.preference.Preference;
-import androidx.preference.SwitchPreferenceCompat;
-import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.appcompat.app.AlertDialog;
+
 
 public class SettingsActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+    private TextView tvThemeValue;
+    private TextView tvLanguageValue;
 
+    @Override
+            protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_settings);
+
+            // Initialize views
+            tvThemeValue = findViewById(R.id.tv_theme_value);
+            tvLanguageValue = findViewById(R.id.tv_language_value);
+            LinearLayout layoutTheme = findViewById(R.id.layout_theme);
+            LinearLayout layoutLanguage = findViewById(R.id.layout_language);
+
+            // Set up click listeners
+            layoutTheme.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showThemeSelectionDialog();
+                }
+            });
+
+            layoutLanguage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showLanguageSelectionDialog();
+                }
+            });
+        // Initialize Bottom Navigation View
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         // Set Home as the selected default item
@@ -55,5 +78,47 @@ public class SettingsActivity extends AppCompatActivity {
             }
             return false; // Return false if none of the conditions matched
         });
+    }
+
+        private void showThemeSelectionDialog() {
+            final String[] themes = {"System Default", "Light", "Dark"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Choose Theme")
+                    .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            tvThemeValue.setText(themes[which]);
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+
+        private void showLanguageSelectionDialog() {
+            final String[] languages = {"English", "Spanish", "Mandarin Chinese", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "German", "French", "Urdu"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Choose Language")
+                    .setSingleChoiceItems(languages, -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            tvLanguageValue.setText(languages[which]);
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
     }
 }

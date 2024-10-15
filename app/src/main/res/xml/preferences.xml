@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Alert Notifications Switch -->
+    <SwitchPreferenceCompat
+        android:key="pref_alert_notifications"
+        android:title="Alert Notifications"
+        android:summary="Enable or disable alert notifications"
+        android:defaultValue="true" />
+
+    <!-- Emergency Contacts -->
+    <PreferenceCategory android:title="Emergency Contacts">
+        <Preference
+            android:key="pref_manage_emergency_contacts"
+            android:title="Manage Contacts"
+            android:summary="Add, edit, or remove emergency contacts" />
+    </PreferenceCategory>
+
+    <!-- Privacy Section -->
+    <PreferenceCategory android:title="Privacy">
+        <Preference
+            android:key="pref_privacy_policy"
+            android:title="Privacy Policy"
+            android:summary="View our privacy policy" />
+    </PreferenceCategory>
+
+    <!-- Help Section -->
+    <PreferenceCategory android:title="Help">
+        <Preference
+            android:key="pref_help_section"
+            android:title="Help &amp; Support"
+            android:summary="Get assistance and support" />
+    </PreferenceCategory>
+
+    <!-- FAQ Section -->
+    <PreferenceCategory android:title="FAQ">
+        <Preference
+            android:key="pref_faq"
+            android:title="Frequently Asked Questions"
+            android:summary="Find answers to common questions" />
+    </PreferenceCategory>
+
+    <!-- Delete History -->
+    <PreferenceCategory android:title="Data Management">
+        <Preference
+            android:key="pref_delete_history"
+            android:title="Delete History"
+            android:summary="Delete your blood pressure and activity history"
+            android:icon="@android:drawable/ic_menu_delete" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

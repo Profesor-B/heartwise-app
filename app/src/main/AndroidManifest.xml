@@ -19,6 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HeartWise">
         <activity
+            android:name=".FAQActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmergencyContactsActivity"
+            android:exported="false" />
+        <activity
             android:name=".HistoryActivity"
             android:exported="false" />
         <activity
@@ -31,9 +43,6 @@
             android:name=".HomeActivityMain"
             android:exported="false"
             android:label="@string/title_activity_home_main" />
-        <activity
-            android:name=".HomeScreenActivity"
-            android:exported="false" />
         <activity
             android:name=".GetStarted"
             android:exported="false" />

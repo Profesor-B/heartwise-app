@@ -12,11 +12,13 @@ public class HomeActivityMain extends AppCompatActivity {
 
     private Button measureHeartRateButton;
     private Button viewHistoryButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_main);
 
+        // Initialize the BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         // Set Home as the selected default item
@@ -52,7 +54,6 @@ public class HomeActivityMain extends AppCompatActivity {
             }
             return false; // Return false if none of the conditions matched
         });
-
 
         // Initialize buttons
         measureHeartRateButton = findViewById(R.id.measureHeartRateButton);
