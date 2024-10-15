@@ -20,10 +20,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/currentBPM"
+                android:textSize="24sp"
+                android:layout_marginHorizontal="15dp"
                 android:text="Current BPM: 0"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/returnHomeBtn"
                 android:text="Return home"
                 android:gravity="center"
                 app:cornerRadius="15dp"
@@ -35,7 +38,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start detection"
+                android:id="@+id/saveResultBtn"
+                android:text="Save Result"
                 android:gravity="center"
                 app:cornerRadius="15dp"
                 android:textSize="11sp"

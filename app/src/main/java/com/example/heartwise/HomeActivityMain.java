@@ -1,28 +1,50 @@
 package com.example.heartwise;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.List;
 
 public class HomeActivityMain extends AppCompatActivity {
 
     private Button measureHeartRateButton;
     private Button viewResultsButton;
+    private BPMResultDao bpmResultDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_main);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // Initialize the BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         // Set Home as the selected default item
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"heartwise-db").allowMainThreadQueries().build();
+
+        bpmResultDao = db.bpmDao();
+
+        TextView currentBPM = findViewById(R.id.heartRateTextView);
+
+        List<BPMResult> bpmResults = bpmResultDao.getAll();
+
+        if(!bpmResults.isEmpty()) {
+            BPMResult lastIndex = bpmResults.get(bpmResults.size() - 1);
+            if(lastIndex != null) {
+                currentBPM.setText(lastIndex.getResult());
+            }
+        }
 
         // Set the listener for navigation item selection
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

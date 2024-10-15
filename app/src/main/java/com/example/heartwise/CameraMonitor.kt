@@ -2,6 +2,7 @@ package com.example.heartwise
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -9,7 +10,6 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.media.Image
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import android.view.Surface
 import android.view.View
@@ -23,13 +23,10 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
+import androidx.room.Room
 import com.example.heartwise.databinding.ActivityCameraMonitorBinding
 import org.opencv.android.Utils
-import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.MatOfInt
@@ -41,6 +38,8 @@ import org.opencv.imgproc.Imgproc
 import org.opencv.objdetect.CascadeClassifier
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -54,8 +53,7 @@ class CameraMonitor : AppCompatActivity() {
 
     private var imageCapture: ImageCapture? = null
 
-    private var videoCapture: VideoCapture<Recorder>? = null
-    private var recording: Recording? = null
+    private var bpmResultDao:BPMResultDao? = null;
 
     private var faceDetector: CascadeClassifier? = null
     private var eyeDetector: CascadeClassifier? = null
@@ -91,6 +89,32 @@ class CameraMonitor : AppCompatActivity() {
             startCamera()
         } else {
             requestPermissions()
+        }
+
+        val db = Room.databaseBuilder(applicationContext,AppDatabase::class.java,"heartwise-db").allowMainThreadQueries().build();
+
+        bpmResultDao = db.bpmDao();
+
+        viewBinding.saveResultBtn.setOnClickListener {
+            // get the result and convert it first into toast
+            val result = viewBinding.currentBPM.text.split(":")[1].trim()
+            // Set current date
+            val currentDate = SimpleDateFormat("MM-dd-yyyy").format(Date())
+            Toast.makeText(applicationContext,"Current bpm: $result",Toast.LENGTH_SHORT).show();
+
+            val bpmResult = BPMResult(
+                uid = 0,
+                result = result,
+                timestamp = currentDate
+            )
+
+            bpmResultDao!!.insertData(bpmResult)
+
+            startActivity(Intent(applicationContext,HomeActivityMain::class.java))
+        }
+
+        viewBinding.returnHomeBtn.setOnClickListener {
+            startActivity(Intent(applicationContext,HomeActivityMain::class.java))
         }
 
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -321,8 +345,10 @@ class CameraMonitor : AppCompatActivity() {
                     }
 
                     val yuvMat = Mat(height + height / 2, width, CvType.CV_8UC1)
-                    yuvMat.put(0,0,yuvBytes)
-                    Imgproc.cvtColor(yuvMat, rgbaMat, Imgproc.COLOR_YUV2RGBA_I420, 4)
+                    if(!yuvMat.empty()) {
+                        yuvMat.put(0,0,yuvBytes)
+                        Imgproc.cvtColor(yuvMat, rgbaMat, Imgproc.COLOR_YUV2RGBA_I420, 4)
+                    }
                 }
             }
             return rgbaMat
