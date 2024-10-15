@@ -1,92 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
     android:gravity="center"
-    android:background="@color/pink_200"
-    tools:context=".ResultActivity">
-    <!--Start of Result Screen-->
+    android:background="@color/pink_200">
 
-    <!-- XML Layout for the Settings UI -->
-    <LinearLayout
+    <!-- Activity History Section -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/pink_200"
-        android:padding="15dp">
+        android:layout_height="200dp">
 
-        <!-- App Appearance Section -->
+        <ImageView
+            android:id="@+id/appTitle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/pink_200"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/heartwisetext" />
 
-        <RelativeLayout
-            android:layout_width="350dp"
-            android:layout_height="150dp">
+        <!-- Heart BPM Section -->
 
-            <ImageView
-                android:id="@+id/appTitle"
-                android:layout_width="350dp"
-                android:layout_height="40dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:background="@color/pink_200"
-                android:src="@drawable/heartwisetext"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/heart_icon"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="43dp"
+            android:src="@drawable/heartwiselogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Heart BPM Section -->
-
-            <ImageView
-                android:id="@+id/heart_icon"
-                android:layout_width="390dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="28dp"
-                android:src="@drawable/heartwiselogo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_result"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="120dp"
-                android:backgroundTint="@color/pink_700"
-                android:fontFamily="sans-serif-medium"
-                android:text="Blood Pressure Result"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-
-        </RelativeLayout>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="30dp">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_history"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="100dp"
-                android:clipToPadding="false"
-                android:padding="30dp"
-                android:scrollbars="vertical" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="135dp"
+            android:backgroundTint="@color/pink_700"
+            android:fontFamily="sans-serif-medium"
+            android:text="Blood Pressure History"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+    </RelativeLayout>
+    <!-- FrameLayout to Hold Different Fragments for Each Screen -->
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
@@ -98,26 +57,9 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="646dp"
+        android:layout_alignParentBottom="true"
         android:background="@color/pink_200"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/buttom_navigation_menu"/>
-
-    <!-- Floating Action Button (Optional) -->
-    <!--
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_measurement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/add_measurement"
-        android:src="@drawable/ic_add"
-        app:fabSize="normal"
-        app:layout_anchor="@id/recyclerView_history"
-        app:layout_anchorGravity="bottom|end"
-        android:layout_margin="16dp" />
-    -->
-    <!-- FrameLayout to Hold Different Fragments for Each Screen -->
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

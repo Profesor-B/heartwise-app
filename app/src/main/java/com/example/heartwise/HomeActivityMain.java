@@ -11,7 +11,7 @@ import android.widget.Button;
 public class HomeActivityMain extends AppCompatActivity {
 
     private Button measureHeartRateButton;
-    private Button viewHistoryButton;
+    private Button viewResultsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class HomeActivityMain extends AppCompatActivity {
 
         // Initialize buttons
         measureHeartRateButton = findViewById(R.id.measureHeartRateButton);
-        viewHistoryButton = findViewById(R.id.viewHistoryButton);
+        viewResultsButton = findViewById(R.id.viewResultsButton);
 
         // Set onClick listener for Measure Heart Rate button
         measureHeartRateButton.setOnClickListener(new View.OnClickListener() {
@@ -70,11 +70,11 @@ public class HomeActivityMain extends AppCompatActivity {
         });
 
         // Set onClick listener for View History button
-        viewHistoryButton.setOnClickListener(new View.OnClickListener() {
+        viewResultsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Navigate to History Activity
-                Intent intent = new Intent(HomeActivityMain.this, HistoryActivity.class);
+                Intent intent = new Intent(HomeActivityMain.this, ResultActivity.class);
                 startActivity(intent);
             }
         });

@@ -12,7 +12,7 @@
 <!--Start of Home Main-->
     <ImageView
         android:id="@+id/appTitle"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
@@ -27,7 +27,7 @@
 
     <ImageView
         android:id="@+id/heart_icon"
-        android:layout_width="390dp"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="43dp"
         android:src="@drawable/heartwiselogo"
@@ -65,12 +65,11 @@
         android:layout_height="900dp">
     <TextView
         android:id="@+id/heartRateLastMeasure"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:fontFamily="@font/alatsi"
-        android:text="BPM"
-        android:padding="10dp"
+        android:text="                                             BPM"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
     </RelativeLayout>
@@ -90,7 +89,7 @@
         tools:ignore="NotSibling" />
 
     <Button
-        android:id="@+id/viewHistoryButton"
+        android:id="@+id/viewResultsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/measureHeartRateButton"
@@ -100,7 +99,7 @@
         android:textSize="11sp"
         android:backgroundTint="@color/pink_700"
         android:fontFamily="sans-serif-medium"
-        android:text="View History" />
+        android:text="View Results" />
 
 
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
