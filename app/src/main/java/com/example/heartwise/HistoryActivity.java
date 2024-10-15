@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +26,7 @@ public class HistoryActivity extends AppCompatActivity {
     private Button btnAddActivity;
     private RecyclerView rvActivityLog;
     private ActivityAdapter activityAdapter;
-    private AppDatabase db;
+    private ActivityDao activityDao;
     private TextView tvDate;
 
     @Override
@@ -44,8 +46,10 @@ public class HistoryActivity extends AppCompatActivity {
         tvDate.setText("Activity Date: " + currentDate);
 
         // Initialize database
-        db = AppDatabase.getDatabase(this);
-
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "heartwise-dbbbb")
+                .allowMainThreadQueries()
+                .build();
+        activityDao = db.activityDao();
         // Set up RecyclerView
         rvActivityLog.setLayoutManager(new LinearLayoutManager(this));
         activityAdapter = new ActivityAdapter();
@@ -62,12 +66,9 @@ public class HistoryActivity extends AppCompatActivity {
                 String heartRateStr = etHeartRate.getText().toString();
 
                 if (!TextUtils.isEmpty(activityDescription) && !TextUtils.isEmpty(heartRateStr)) {
-                    int heartRate = Integer.parseInt(heartRateStr);
-                    ActivityEntity activity = new ActivityEntity(currentDate, activityDescription, heartRate);
-
+                    ActivityEntity activity = new ActivityEntity(0,currentDate, activityDescription, heartRateStr);
                     // Insert activity into the database
-                    db.activityDao().insertActivity(activity);
-
+                    activityDao.insertActivity(activity);
                     // Clear inputs
                     etActivityDescription.setText("");
                     etHeartRate.setText("");
@@ -117,7 +118,8 @@ public class HistoryActivity extends AppCompatActivity {
     }
     // Method to load and display activities from the database
     private void loadActivities() {
-        List<ActivityEntity> activities = db.activityDao().getAllActivities();
+        List<ActivityEntity> activities = activityDao.getAllActivities();
+        Log.i("DB_Activity", String.valueOf(activities.size()));
         activityAdapter.setActivities(activities);
     }
 }

@@ -437,14 +437,16 @@ class CameraMonitor : AppCompatActivity() {
                         }
                         if (enableRectangle) {
                             for (face in faceDetection.toArray()) {
-                                Imgproc.rectangle(
-                                    rgbMatFrame, Point(face.x.toDouble(), face.y.toDouble()),
-                                    Point(
-                                        face.x.toDouble() + face.width.toDouble(),
-                                        face.y.toDouble() + face.height.toDouble()
-                                    ), Scalar
-                                        (255.0, 0.0, 0.0), 4
-                                )
+                                if(!rgbMatFrame.empty()) {
+                                    Imgproc.rectangle(
+                                        rgbMatFrame, Point(face.x.toDouble(), face.y.toDouble()),
+                                        Point(
+                                            face.x.toDouble() + face.width.toDouble(),
+                                            face.y.toDouble() + face.height.toDouble()
+                                        ), Scalar
+                                            (255.0, 0.0, 0.0), 4
+                                    )
+                                }
                             }
                         }
 

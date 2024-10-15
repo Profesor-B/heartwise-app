@@ -29,9 +29,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
     @Override
     public void onBindViewHolder(@NonNull ActivityViewHolder holder, int position) {
         ActivityEntity activity = activities.get(position);
-        holder.tvDate.setText(activity.date);
-        holder.tvActivity.setText(activity.activityDescription);
-        holder.tvHeartRate.setText("Heart Rate: " + activity.heartRate + " bpm");
+        holder.tvDate.setText(activity.getDate());
+        holder.tvActivity.setText(activity.getActivityInfo());
+        holder.tvHeartRate.setText("Heart Rate: " + activity.getHeartRate() + " bpm");
     }
 
     @Override

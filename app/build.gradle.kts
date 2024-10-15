@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    ksp(libs.room.compiler.v250)
     implementation(libs.camera.core)
     implementation(libs.camera.camera2)
     implementation(libs.camera.lifecycle)

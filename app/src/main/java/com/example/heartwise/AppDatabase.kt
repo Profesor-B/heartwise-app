@@ -1,25 +1,52 @@
-package com.example.heartwise;
+package com.example.heartwise
 
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import android.content.Context;
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.RoomDatabase
 
-@Database(entities = {ActivityEntity.class}, version = 1)
-public abstract class AppDatabase extends RoomDatabase {
-    private static AppDatabase INSTANCE;
+@Entity
+data class BPMResult (
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name = "result") val result:String,
+    @ColumnInfo(name = "timestamp") val timestamp:String,
+)
 
-    public abstract ActivityDao activityDao();
+@Dao
+interface BPMResultDao {
+    @Query("SELECT * FROM BPMResult")
+    fun getAll(): List<BPMResult>
 
-    public static AppDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
-            synchronized (AppDatabase.class) {
-                INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                AppDatabase.class, "activity_database")
-                        .allowMainThreadQueries()
-                        .build();
-            }
-        }
-        return INSTANCE;
-    }
+    @Insert
+    fun insertData(bpmResult: BPMResult)
+}
+
+@Entity(primaryKeys = ["uid"])
+data class ActivityEntity (
+    val uid: Int,
+    @ColumnInfo(name = "date") var date: String,
+    @ColumnInfo(name = "activity_info") var activityInfo:String,
+    @ColumnInfo(name = "heart_rate") var heartRate:String,
+)
+
+@Dao
+interface ActivityDao {
+    @Insert
+    fun insertActivity(activityEntity: ActivityEntity)
+
+    @Query("SELECT * FROM ActivityEntity ORDER BY date DESC")
+    fun getAllActivities(): List<ActivityEntity?>?
+
+    @Query("SELECT * FROM ActivityEntity WHERE date = :date")
+    fun getActivitiesByDate(date: String?): List<ActivityEntity?>?
+}
+
+@Database(entities = [BPMResult::class,ActivityEntity::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun bpmDao(): BPMResultDao
+    abstract fun activityDao(): ActivityDao
 }

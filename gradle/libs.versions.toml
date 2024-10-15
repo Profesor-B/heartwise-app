@@ -18,6 +18,7 @@ kotlin = "1.9.24"
 coreKtx = "1.10.1"
 preference = "1.2.0"
 roomCommon = "2.6.1"
+roomCompilerVersion = "2.5.0"
 roomRuntime = "2.6.1"
 roomCompiler = "2.6.1"
 swiperefreshlayout = "1.1.0"
@@ -45,6 +46,7 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
+room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
