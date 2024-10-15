@@ -8,6 +8,7 @@
     android:gravity="center"
     android:background="@color/pink_200">
 
+    <!-- Activity History Section -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp">
@@ -34,76 +35,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_act_history"
+            android:id="@+id/tv_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="135dp"
             android:backgroundTint="@color/pink_700"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Activity History"
+            android:text="Blood Pressure History"
             android:textAlignment="center"
             android:textSize="20sp" />
     </RelativeLayout>
-
-    <!--Start of Activity History-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="180dp"
-        android:background="@drawable/rounded_corners"
-        android:padding="20dp">
-
-        <!-- Date of the activity -->
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" Activity Date: "
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:fontFamily="@font/poppins_semibold"/>
-
-        <!-- Activity Description -->
-        <EditText
-            android:id="@+id/etActivityDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Activity Description"
-            android:textSize="18sp"
-            android:fontFamily="@font/poppins_semibold"
-            android:inputType="text"/>
-
-        <!-- Heart Rate Input -->
-        <EditText
-            android:id="@+id/etHeartRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Heart Rate (bpm)"
-            android:fontFamily="@font/poppins_semibold"
-            android:textSize="18sp"
-            android:inputType="number"/>
-
-        <!-- Button to Add Activity -->
-        <Button
-            android:id="@+id/btnAddActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Activity"
-            android:fontFamily="@font/poppins_semibold"
-            android:padding="10dp"
-            android:textSize="8sp"
-            app:cornerRadius="12dp"/>
-
-        <!-- RecyclerView to display activities -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvActivityLog"
-            android:scrollbars="vertical"
-            android:padding="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
     <FrameLayout

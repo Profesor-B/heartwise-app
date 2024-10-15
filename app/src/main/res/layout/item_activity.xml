@@ -1,39 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    card_view:cardElevation="4dp"
+    card_view:cardCornerRadius="8dp"
+    android:layout_marginBottom="12dp"
     tools:context=".ActivityAdapter">
 
     <!-- item_activity.xml -->
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:background="@color/cardview_shadow_start_color"
+        android:padding="16dp"
+
+        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date" />
+            android:text="Date"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_semibold"/>
 
         <TextView
             android:id="@+id/tvActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_semibold"
             android:text="Activity Description" />
 
         <TextView
             android:id="@+id/tvHeartRate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Heart Rate" />
+            android:gravity="center"
+            android:text="Heart Rate"
+            />
     </LinearLayout>
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
