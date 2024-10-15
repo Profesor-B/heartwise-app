@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HeartWise">
         <activity
+            android:name=".ActivityAdapter"
+            android:exported="false" />
+        <activity
             android:name=".FAQActivity"
             android:exported="false" />
         <activity

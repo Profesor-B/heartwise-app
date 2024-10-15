@@ -84,7 +84,7 @@
         app:cornerRadius="15dp"
         android:textSize="11sp"
         android:backgroundTint="@color/pink_700"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Measure Heart Rate"
         tools:ignore="NotSibling" />
 
@@ -98,7 +98,7 @@
         app:cornerRadius="15dp"
         android:textSize="11sp"
         android:backgroundTint="@color/pink_700"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/poppins_semibold"
         android:text="View Results" />
 
 
