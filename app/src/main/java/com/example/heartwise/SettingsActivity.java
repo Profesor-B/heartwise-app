@@ -1,5 +1,6 @@
 package com.example.heartwise;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -7,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.view.View;
+
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
@@ -16,18 +19,26 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView tvThemeValue;
     private TextView tvLanguageValue;
 
+    private TextView tvEmergencyContactsValue;
+    private LinearLayout layoutEmergencyContacts;
+
     @Override
             protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_settings);
 
-            // Initialize views
+            // Initialize App appearance
             tvThemeValue = findViewById(R.id.tv_theme_value);
             tvLanguageValue = findViewById(R.id.tv_language_value);
             LinearLayout layoutTheme = findViewById(R.id.layout_theme);
             LinearLayout layoutLanguage = findViewById(R.id.layout_language);
 
-            // Set up click listeners
+            //Initialize Emergency Contacts
+            tvEmergencyContactsValue = findViewById(R.id.tv_emergency_contacts_value);
+            layoutEmergencyContacts = findViewById(R.id.layout_emergency_contacts);
+
+
+        // Set up click listeners
             layoutTheme.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,9 +88,41 @@ public class SettingsActivity extends AppCompatActivity {
             }
             return false; // Return false if none of the conditions matched
         });
+
+        layoutEmergencyContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEmergencyContactsDialog();
+            }
+        });
+    }
+    private void showEmergencyContactsDialog() {
+        // For simplicity, we'll show a dialog to add a single contact.
+        final EditText input = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Emergency Contact")
+                .setView(input)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String contact = input.getText().toString();
+                        // Here you would typically save the contact in a list or database
+                        // For this example, we'll just update the TextView to show the count
+                        int currentCount = Integer.parseInt(tvEmergencyContactsValue.getText().toString().split(" ")[0]);
+                        tvEmergencyContactsValue.setText((currentCount + 1) + " Contacts");
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
-        private void showThemeSelectionDialog() {
+
+    private void showThemeSelectionDialog() {
             final String[] themes = {"System Default", "Light", "Dark"};
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Choose Theme")

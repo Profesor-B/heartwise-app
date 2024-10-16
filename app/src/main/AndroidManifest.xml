@@ -22,18 +22,6 @@
             android:name=".ActivityAdapter"
             android:exported="false" />
         <activity
-            android:name=".FAQActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HelpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PrivacyActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EmergencyContactsActivity"
-            android:exported="false" />
-        <activity
             android:name=".HistoryActivity"
             android:exported="false" />
         <activity

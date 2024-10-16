@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
-        tools:ignore="MissingConstraints">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/tvDate"
@@ -34,6 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Heart Rate" />
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

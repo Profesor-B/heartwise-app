@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Light >"
-                android:backgroundTint="@color/pink_700"
+                android:textColor="@color/white"
                 android:fontFamily="@font/poppins_semibold"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -120,12 +120,49 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="English >"
-                android:backgroundTint="@color/pink_700"
+                android:textColor="@color/white"
                 android:fontFamily="@font/poppins_semibold"
                 android:textSize="16sp"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/tv_emergency_contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency Contacts"
+            android:textSize="20sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:paddingTop="10dp"/>
+        <!-- Theme Settings -->
+        <LinearLayout
+            android:id="@+id/layout_emergency_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp"
+            android:clickable="true"
+            android:focusable="true">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Add Emergency Contacts"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_emergency_contacts_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Contacts"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="16sp"/>
+        </LinearLayout>
     </LinearLayout>
+
+
     <!-- Start of settings preview-->
     <FrameLayout
         android:id="@+id/settings_container"

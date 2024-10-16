@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="120dp">
@@ -54,14 +54,14 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/alatsi"
-            android:text="75"
+            android:text="143"
             android:textColor="@android:color/white"
             android:textSize="80sp" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="500dp"
+        android:layout_width="match_parent"
         android:layout_height="900dp">
     <TextView
         android:id="@+id/heartRateLastMeasure"
