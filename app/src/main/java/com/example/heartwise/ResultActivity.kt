@@ -52,7 +52,7 @@ class ResultActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java,"heartwise-db").allowMainThreadQueries().build();
+        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java,"bpm-result-db").allowMainThreadQueries().build();
 
         bpmResultDao = db.bpmDao();
 

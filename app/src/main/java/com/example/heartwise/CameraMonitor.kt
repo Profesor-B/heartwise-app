@@ -100,7 +100,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
             requestPermissions()
         }
 
-        val db = Room.databaseBuilder(applicationContext,AppDatabase::class.java,"heartwise-db").allowMainThreadQueries().build();
+        val db = Room.databaseBuilder(applicationContext,AppDatabase::class.java,"bpm-result-db").allowMainThreadQueries().build();
 
         bpmResultDao = db.bpmDao();
 

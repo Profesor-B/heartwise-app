@@ -31,7 +31,7 @@ public class HomeActivityMain extends AppCompatActivity {
         // Set Home as the selected default item
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"heartwise-db").allowMainThreadQueries().build();
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"bpm-result-db").allowMainThreadQueries().build();
 
         bpmResultDao = db.bpmDao();
 
