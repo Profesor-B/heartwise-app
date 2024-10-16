@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_settings);
         //Initialize Emergency Contacts
         tvEmergencyContactsValue = findViewById(R.id.tv_emergency_contacts_value);
         layoutEmergencyContacts = findViewById(R.id.layout_emergency_contacts);
@@ -82,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
         // Load the user name from SharedPreferences and set it to the TextView
         String userName = sharedPreferences.getString(PREFS_USER_NAME, "User");
+        emergencyVictimName = userName;
         tvUserName.setText("Welcome, " + userName);
 
         // Set onClickListener for Save Name button
@@ -338,7 +339,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Send an emergency SMS message
     private void sendEmergencyMessage(int bloodPressure) {
-        String message = "Emergency! Blood pressure is too high: " + bloodPressure + " please contact " + emergencyVictimName;
+        String message = "Emergency! Blood pressure is too high: " + bloodPressure + " please contact " + emergencyVictimName + " and give them assistance";
 
         // Check if there are any emergency contacts saved
         if (emergencyContacts.isEmpty()) {
