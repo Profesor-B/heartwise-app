@@ -1,6 +1,5 @@
 package com.example.heartwise;
 
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -22,27 +20,35 @@ import android.telephony.SmsManager;
 import android.widget.Button;
 import android.widget.Toast;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.provider.ContactsContract;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import android.content.res.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
     private TextView tvThemeValue;
     private TextView tvLanguageValue;
+    private static final String PREFS_NAME2 = "AppPreferences";
+    private static final String PREFS_KEY_THEME = "AppTheme";
+    private static final String PREFS_KEY_LANGUAGE = "AppLanguage";
+
+    private static final int THEME_SYSTEM_DEFAULT = 0;
+    private static final int THEME_LIGHT = 1;
+    private static final int THEME_DARK = 2;
 
     private TextView tvEmergencyContactsValue;
     private LinearLayout layoutEmergencyContacts;
 
     private static final int SMS_PERMISSION_CODE = 101;
-    private static final int BP_THRESHOLD = 140; // Example threshold for high BP
+    private static final int BP_THRESHOLD = 130; // Example threshold for high BP
     private List<String> emergencyContacts; // Stores emergency contact numbers
     private EditText etBloodPressure;
 
@@ -55,14 +61,22 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Apply saved theme
+        applySavedTheme();
         setContentView(R.layout.activity_settings);
 
         // Initialize App appearance
         tvThemeValue = findViewById(R.id.tv_theme_value);
         tvLanguageValue = findViewById(R.id.tv_language_value);
-        LinearLayout layoutTheme = findViewById(R.id.layout_theme);
-        LinearLayout layoutLanguage = findViewById(R.id.layout_language);
 
+        // Load saved theme and language from SharedPreferences
+        loadPreferences();
+
+        // Theme selection dialog
+        findViewById(R.id.layout_theme).setOnClickListener(v -> showThemeSelectionDialog());
+
+        // Language selection dialog
+        findViewById(R.id.layout_language).setOnClickListener(v -> showLanguageSelectionDialog());
         //Initialize Emergency Contacts
         tvEmergencyContactsValue = findViewById(R.id.tv_emergency_contacts_value);
         layoutEmergencyContacts = findViewById(R.id.layout_emergency_contacts);
@@ -118,20 +132,6 @@ public class SettingsActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
         }
 
-        // Set up click listeners
-        layoutTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showThemeSelectionDialog();
-            }
-        });
-
-        layoutLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLanguageSelectionDialog();
-            }
-        });
         // Initialize Bottom Navigation View
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -333,45 +333,126 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    // Method to show the theme selection dialog
     private void showThemeSelectionDialog() {
-            final String[] themes = {"System Default", "Light", "Dark"};
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Choose Theme")
-                    .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            tvThemeValue.setText(themes[which]);
-                            dialog.dismiss();
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
-        }
+        final String[] themes = {"System Default", "Light", "Dark"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Theme")
+                .setSingleChoiceItems(themes, -1, (dialog, which) -> {
+                    tvThemeValue.setText(themes[which]);
+                    saveThemePreference(which); // Save selected theme
+                    applyTheme(which); // Apply the selected theme
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
 
-        private void showLanguageSelectionDialog() {
-            final String[] languages = {"English", "Spanish", "Mandarin Chinese", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "German", "French", "Urdu"};
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Choose Language")
-                    .setSingleChoiceItems(languages, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            tvLanguageValue.setText(languages[which]);
-                            dialog.dismiss();
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
+    // Method to show the language selection dialog
+    private void showLanguageSelectionDialog() {
+        final String[] languages = {"English", "Spanish", "Mandarin Chinese", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "German", "French", "Urdu"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Language")
+                .setSingleChoiceItems(languages, -1, (dialog, which) -> {
+                    tvLanguageValue.setText(languages[which]);
+                    saveLanguagePreference(languages[which]); // Save selected language
+                    applyLanguage(languages[which]); // Apply the selected language
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+    // Save selected theme in SharedPreferences
+    private void saveThemePreference(int theme) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PREFS_KEY_THEME, theme);
+        editor.apply();
+    }
+
+    // Apply the selected theme and restart the activity to apply changes
+    private void applyTheme(int theme) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
+        int currentTheme = sharedPreferences.getInt(PREFS_KEY_THEME, THEME_SYSTEM_DEFAULT);
+
+        // Only apply the theme and restart if the theme is different
+        if (currentTheme != theme) {
+            switch (theme) {
+                case THEME_LIGHT:
+                    setTheme(R.style.Theme_App_Light);
+                    break;
+                case THEME_DARK:
+                    setTheme(R.style.Theme_App_Dark);
+                    break;
+                default:
+                    setTheme(R.style.Theme_App_SystemDefault);
+            }
+
+            // Save the new theme preference
+            saveThemePreference(theme);
+
+            // Restart the activity to apply the theme change
+            recreate();
+        }
+    }
+    // Save selected language in SharedPreferences
+    private void saveLanguagePreference(String languageCode) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREFS_KEY_LANGUAGE, languageCode);
+        editor.apply();
+    }
+
+    // Apply the selected language and restart the activity to apply changes
+    private void applyLanguage(String languageCode) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
+        String currentLanguage = sharedPreferences.getString(PREFS_KEY_LANGUAGE, Locale.getDefault().getLanguage());
+
+        // Only apply the language if the selected language is different
+        if (!currentLanguage.equals(languageCode)) {
+            Locale locale = new Locale(languageCode);
+            Locale.setDefault(locale);
+
+            Configuration config = new Configuration();
+            config.locale = locale;
+
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+            // Save the new language preference
+            saveLanguagePreference(languageCode);
+
+            // Restart the activity to apply the language change
+            recreate();
+        }
+    }
+
+
+    // Load preferences (theme and language) on app start
+    private void loadPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
+
+        // Load and apply saved theme
+        int savedTheme = sharedPreferences.getInt(PREFS_KEY_THEME, THEME_SYSTEM_DEFAULT);
+        applyTheme(savedTheme);
+
+        // Load and apply saved language
+        String savedLanguage = sharedPreferences.getString(PREFS_KEY_LANGUAGE, Locale.getDefault().getLanguage());
+        applyLanguage(savedLanguage);
+
+        // Update UI elements
+        String[] themes = {"System Default", "Light", "Dark"};
+        tvThemeValue.setText(themes[savedTheme]);
+
+        tvLanguageValue.setText(savedLanguage);
+    }
+
+    // Apply saved theme when the app starts
+    private void applySavedTheme() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
+        int savedTheme = sharedPreferences.getInt(PREFS_KEY_THEME, THEME_SYSTEM_DEFAULT);
+        applyTheme(savedTheme);
     }
 }
