@@ -60,7 +60,7 @@
             android:text="App Appearance"
             android:textSize="20sp"
             android:fontFamily="@font/poppins_semibold"
-            android:paddingTop="80dp"/>
+            android:paddingTop="40dp"/>
         <!-- Theme Settings -->
         <LinearLayout
             android:id="@+id/layout_theme"
@@ -147,7 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add Emergency Contacts"
+                android:text="Added :"
                 android:fontFamily="@font/poppins_semibold"
                 android:textSize="16sp"/>
 
@@ -159,6 +159,46 @@
                 android:textColor="@color/white"
                 android:fontFamily="@font/poppins_semibold"
                 android:textSize="16sp"/>
+        </LinearLayout>
+
+        <!-- res/layout/activity_main.xml -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+
+            <!-- Input for current blood pressure -->
+            <EditText
+                android:id="@+id/et_blood_pressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Blood Pressure"
+                android:inputType="number" />
+
+            <!-- Button to add emergency contacts -->
+            <Button
+                android:id="@+id/btn_add_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cornerRadius="15dp"
+                android:textSize="11sp"
+                android:backgroundTint="@color/pink_700"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Add Emergency Contacts" />
+
+            <!-- Button to simulate blood pressure check -->
+            <Button
+                android:id="@+id/btn_check_pressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cornerRadius="15dp"
+                android:textSize="11sp"
+                android:backgroundTint="@color/pink_700"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Check Blood Pressure" />
+
         </LinearLayout>
     </LinearLayout>
 

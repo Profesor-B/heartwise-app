@@ -45,6 +45,7 @@
             android:textAlignment="center"
             android:textSize="20sp" />
     </RelativeLayout>
+
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
     <FrameLayout
         android:id="@+id/frameLayout"
