@@ -42,8 +42,8 @@ public class HistoryActivity extends AppCompatActivity {
         tvDate = findViewById(R.id.tvDate);
 
         // Set current date
-        String currentDate = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
-        tvDate.setText("Activity Date: " + currentDate);
+        String currentDate = new SimpleDateFormat("MMMM dd, yyyy").format(new Date());
+        tvDate.setText("Date Today: " + currentDate);
 
         // Initialize database
         AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "heartwise-dbbbb")
