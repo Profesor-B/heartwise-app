@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="15dp"
     android:gravity="center"
     android:background="@color/pink_200">
@@ -51,8 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="180dp"
-        android:background="@drawable/rounded_corners"
+        android:layout_marginTop="150dp"
         android:padding="20dp">
 
         <!-- Date of the activity -->
@@ -62,38 +60,50 @@
             android:layout_height="wrap_content"
             android:text=" Activity Date: "
             android:textSize="12sp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/poppins_semibold"/>
 
-        <!-- Activity Description -->
+        <!-- Activity Description with Rounded Corners, Padding, and Background -->
         <EditText
             android:id="@+id/etActivityDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Activity Description"
-            android:textSize="18sp"
+            android:textSize="10sp"
             android:fontFamily="@font/poppins_semibold"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:padding="16dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:layout_marginTop="12dp"/>
 
-        <!-- Heart Rate Input -->
+        <!-- Heart Rate Input with Rounded Corners, Padding, and Background -->
         <EditText
             android:id="@+id/etHeartRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Heart Rate (bpm)"
             android:fontFamily="@font/poppins_semibold"
-            android:textSize="18sp"
-            android:inputType="number"/>
+            android:textSize="10sp"
+            android:inputType="number"
+            android:padding="16dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:layout_marginTop="12dp"/>
 
         <!-- Button to Add Activity -->
         <Button
             android:id="@+id/btnAddActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Activity"
             android:fontFamily="@font/poppins_semibold"
             android:padding="10dp"
             android:textSize="8sp"
-            app:cornerRadius="12dp"/>
+            app:cornerRadius="12dp"
+            android:layout_marginTop="5dp"/>
 
         <!-- RecyclerView to display activities -->
         <androidx.recyclerview.widget.RecyclerView

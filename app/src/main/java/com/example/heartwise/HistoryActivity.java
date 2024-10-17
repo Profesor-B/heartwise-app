@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +44,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         // Set current date
         String currentDate = new SimpleDateFormat("MMMM dd, yyyy").format(new Date());
-        tvDate.setText("Date Today: " + currentDate);
+        tvDate.setText(currentDate);
 
         // Initialize database
         AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "history-db")
@@ -66,18 +67,23 @@ public class HistoryActivity extends AppCompatActivity {
                 String heartRateStr = etHeartRate.getText().toString();
 
                 if (!TextUtils.isEmpty(activityDescription) && !TextUtils.isEmpty(heartRateStr)) {
-                    ActivityEntity activity = new ActivityEntity(0,currentDate, activityDescription, heartRateStr);
+                    // Create new activity entity with data
+                    ActivityEntity activity = new ActivityEntity(0, currentDate, activityDescription, heartRateStr);
                     // Insert activity into the database
                     activityDao.insertActivity(activity);
                     // Clear inputs
                     etActivityDescription.setText("");
                     etHeartRate.setText("");
 
+                    // Display toast message
+                    Toast.makeText(HistoryActivity.this, "New activity added", Toast.LENGTH_SHORT).show();
+
                     // Reload activity list
                     loadActivities();
                 }
             }
         });
+
 
         //Initialize Navigation buttons
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
