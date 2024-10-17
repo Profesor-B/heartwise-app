@@ -13,6 +13,7 @@
     <color name="pink">#FD4452</color>
     <color name="pink_200">#C2405A</color>"
     <color name="pink_700">#FD4452</color>
+    <color name="shadow_grey">#37000000</color>
     <color name="grey">#808080</color>
     <color name="bottom_navigation_colors">#D50000</color>
     <color name="brown">#703F3C</color>
@@ -38,6 +39,7 @@
         <color name="darkAccent">#BB86FC</color>
         <color name="darkBackground">#000000</color>
         <color name="lightGray">#BBBBBB</color>
+    <color name="titleTextColor">#581D29</color>
 
 
 </resources>

@@ -61,7 +61,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" Activity Date: "
-            android:textColor="@color/white"
             android:textSize="12sp"
             android:fontFamily="@font/poppins_semibold"/>
 
@@ -99,7 +98,6 @@
         <!-- RecyclerView to display activities -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvActivityLog"
-            android:scrollbars="vertical"
             android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

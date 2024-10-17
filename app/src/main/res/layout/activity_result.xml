@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -45,6 +46,16 @@
             android:textAlignment="center"
             android:textSize="20sp" />
     </RelativeLayout>
+    <!-- RecyclerView for the activity history list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvActivityHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_history"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="200dp"
+        android:padding="20dp"
+        tools:ignore="NotSibling" />
 
     <!-- FrameLayout to Hold Different Fragments for Each Screen -->
     <FrameLayout
