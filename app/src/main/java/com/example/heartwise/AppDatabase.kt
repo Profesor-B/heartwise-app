@@ -25,9 +25,9 @@ interface BPMResultDao {
     fun insertData(bpmResult: BPMResult)
 }
 
-@Entity(primaryKeys = ["uid"])
+@Entity
 data class ActivityEntity (
-    val uid: Int,
+    @PrimaryKey(autoGenerate = true) val uid: Int,
     @ColumnInfo(name = "date") var date: String,
     @ColumnInfo(name = "activity_info") var activityInfo:String,
     @ColumnInfo(name = "heart_rate") var heartRate:String,

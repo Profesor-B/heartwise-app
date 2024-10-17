@@ -46,7 +46,7 @@ public class HistoryActivity extends AppCompatActivity {
         tvDate.setText("Date Today: " + currentDate);
 
         // Initialize database
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "heartwise-dbbbb")
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "history-db")
                 .allowMainThreadQueries()
                 .build();
         activityDao = db.activityDao();
@@ -119,7 +119,6 @@ public class HistoryActivity extends AppCompatActivity {
     // Method to load and display activities from the database
     private void loadActivities() {
         List<ActivityEntity> activities = activityDao.getAllActivities();
-        Log.i("DB_Activity", String.valueOf(activities.size()));
         activityAdapter.setActivities(activities);
     }
 }

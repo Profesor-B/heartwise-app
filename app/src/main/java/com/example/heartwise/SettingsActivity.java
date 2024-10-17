@@ -50,11 +50,13 @@ public class SettingsActivity extends AppCompatActivity {
     private static final int SMS_PERMISSION_CODE = 101;
     private static final int BP_THRESHOLD = 130; // Example threshold for high BP
     private List<String> emergencyContacts; // Stores emergency contact numbers
+    private String emergencyVictimName;
     private EditText etBloodPressure;
 
     private static final int CONTACT_PICKER_REQUEST = 1001;
     private static final String PREFS_NAME = "EmergencyContactsPrefs";
     private static final String PREFS_KEY_CONTACTS = "EmergencyContacts";
+    private static final String PREFS_USER_NAME = "EmergencyVictimName";
 
     private SharedPreferences sharedPreferences;
 
@@ -86,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Load contacts from SharedPreferences
         emergencyContacts = new ArrayList<>(getSavedContacts());
-
+        emergencyVictimName = getUserName();
         // Update the contact count in the UI
         updateContactCount();
 
@@ -285,9 +287,19 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private void saveVictimNameToSharedPreferences() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREFS_USER_NAME, emergencyVictimName);
+        editor.apply();
+    }
+
     // Method to retrieve contacts from SharedPreferences
     private Set<String> getSavedContacts() {
         return sharedPreferences.getStringSet(PREFS_KEY_CONTACTS, new HashSet<>());
+    }
+
+    private String getUserName() {
+        return sharedPreferences.getString(PREFS_USER_NAME, "");
     }
 
     // Method to update the contact count in the TextView
@@ -302,7 +314,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Send an emergency SMS message
     private void sendEmergencyMessage(int bloodPressure) {
-        String message = "Emergency! Blood pressure is too high: " + bloodPressure;
+        String message = "Emergency! Blood pressure is too high: " + bloodPressure + " please contact " + emergencyVictimName;
 
         // Check if there are any emergency contacts saved
         if (emergencyContacts.isEmpty()) {
