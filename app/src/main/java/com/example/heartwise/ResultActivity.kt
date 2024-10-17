@@ -135,9 +135,9 @@ fun BPMCard(bpmResult: BPMResult) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp), // Equivalent to layout_marginTop in XML
-        elevation = CardDefaults.cardElevation(10.dp),
+        elevation = CardDefaults.cardElevation(45.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.shadow_grey)),
-        shape = RoundedCornerShape(55.dp) // Adjusted to 25dp to maintain consistency
+        shape = RoundedCornerShape(15.dp) // Adjusted to 25dp to maintain consistency
     ) {
         Column(
             modifier = Modifier
