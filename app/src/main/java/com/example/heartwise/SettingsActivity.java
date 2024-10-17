@@ -34,8 +34,7 @@ import java.util.Locale;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
-    private TextView tvThemeValue;
-    private TextView tvLanguageValue;
+
     private static final String PREFS_NAME2 = "AppPreferences";
     private static final String PREFS_KEY_THEME = "AppTheme";
     private static final String PREFS_KEY_LANGUAGE = "AppLanguage";
@@ -46,6 +45,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView tvEmergencyContactsValue;
     private LinearLayout layoutEmergencyContacts;
+    private TextView tvUserName;
+    private EditText etUserName;
+    private Button btnSaveUserName;
+    private SharedPreferences sharedPreferences;
 
     private static final int SMS_PERMISSION_CODE = 101;
     private static final int BP_THRESHOLD = 130; // Example threshold for high BP
@@ -58,37 +61,59 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String PREFS_KEY_CONTACTS = "EmergencyContacts";
     private static final String PREFS_USER_NAME = "EmergencyVictimName";
 
-    private SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Apply saved theme
-        applySavedTheme();
-        setContentView(R.layout.activity_settings);
 
-        // Initialize App appearance
-        tvThemeValue = findViewById(R.id.tv_theme_value);
-        tvLanguageValue = findViewById(R.id.tv_language_value);
-
-        // Load saved theme and language from SharedPreferences
-        loadPreferences();
-
-        // Theme selection dialog
-        findViewById(R.id.layout_theme).setOnClickListener(v -> showThemeSelectionDialog());
-
-        // Language selection dialog
-        findViewById(R.id.layout_language).setOnClickListener(v -> showLanguageSelectionDialog());
         //Initialize Emergency Contacts
         tvEmergencyContactsValue = findViewById(R.id.tv_emergency_contacts_value);
         layoutEmergencyContacts = findViewById(R.id.layout_emergency_contacts);
 
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        // Initialize views
+        tvUserName = findViewById(R.id.tvUserName);
+        etUserName = findViewById(R.id.etUserName);
+        btnSaveUserName = findViewById(R.id.btnSaveUserName);
+
+        // Check if the views are found correctly
+        if (tvUserName == null || btnSaveUserName == null) {
+            throw new RuntimeException("View not found! Please check the XML IDs.");
+        }
+        // Load the user name from SharedPreferences and set it to the TextView
+        String userName = sharedPreferences.getString(PREFS_USER_NAME, "User");
+        tvUserName.setText("Welcome, " + userName);
+
+        // Set onClickListener for Save Name button
+        btnSaveUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the name entered by the user
+                String newName = etUserName.getText().toString().trim();
+
+                // Check if the input is not empty
+                if (!newName.isEmpty()) {
+                    // Save the name in SharedPreferences
+                    saveUserName(newName);
+
+                    // Update the TextView with the new name
+                    tvUserName.setText("Welcome, " + newName);
+
+                    // Show a confirmation message
+                    Toast.makeText(SettingsActivity.this, "Name saved successfully!", Toast.LENGTH_SHORT).show();
+
+                    // Clear the EditText for better user experience
+                    etUserName.setText("");
+                } else {
+                    // Show an error message
+                    Toast.makeText(SettingsActivity.this, "Please enter a valid name.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         // Load contacts from SharedPreferences
         emergencyContacts = new ArrayList<>(getSavedContacts());
-        emergencyVictimName = getUserName();
+
         // Update the contact count in the UI
         updateContactCount();
 
@@ -178,6 +203,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Method to save the user's name in SharedPreferences
+    private void saveUserName(String userName) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREFS_USER_NAME, userName);
+        editor.apply();
+    }
+
+
     // Method to display a dialog for adding emergency contacts
     private void showEmergencyContactsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -287,19 +321,9 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void saveVictimNameToSharedPreferences() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PREFS_USER_NAME, emergencyVictimName);
-        editor.apply();
-    }
-
     // Method to retrieve contacts from SharedPreferences
     private Set<String> getSavedContacts() {
         return sharedPreferences.getStringSet(PREFS_KEY_CONTACTS, new HashSet<>());
-    }
-
-    private String getUserName() {
-        return sharedPreferences.getString(PREFS_USER_NAME, "");
     }
 
     // Method to update the contact count in the TextView
@@ -343,128 +367,5 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(this, "SMS permission denied", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    // Method to show the theme selection dialog
-    private void showThemeSelectionDialog() {
-        final String[] themes = {"System Default", "Light", "Dark"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose Theme")
-                .setSingleChoiceItems(themes, -1, (dialog, which) -> {
-                    tvThemeValue.setText(themes[which]);
-                    saveThemePreference(which); // Save selected theme
-                    applyTheme(which); // Apply the selected theme
-                    dialog.dismiss();
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .create()
-                .show();
-    }
-
-    // Method to show the language selection dialog
-    private void showLanguageSelectionDialog() {
-        final String[] languages = {"English", "Spanish", "Mandarin Chinese", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "German", "French", "Urdu"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose Language")
-                .setSingleChoiceItems(languages, -1, (dialog, which) -> {
-                    tvLanguageValue.setText(languages[which]);
-                    saveLanguagePreference(languages[which]); // Save selected language
-                    applyLanguage(languages[which]); // Apply the selected language
-                    dialog.dismiss();
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .create()
-                .show();
-    }
-
-    // Save selected theme in SharedPreferences
-    private void saveThemePreference(int theme) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(PREFS_KEY_THEME, theme);
-        editor.apply();
-    }
-
-    // Apply the selected theme and restart the activity to apply changes
-    private void applyTheme(int theme) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-        int currentTheme = sharedPreferences.getInt(PREFS_KEY_THEME, THEME_SYSTEM_DEFAULT);
-
-        // Only apply the theme and restart if the theme is different
-        if (currentTheme != theme) {
-            switch (theme) {
-                case THEME_LIGHT:
-                    setTheme(R.style.Theme_App_Light);
-                    break;
-                case THEME_DARK:
-                    setTheme(R.style.Theme_App_Dark);
-                    break;
-                default:
-                    setTheme(R.style.Theme_App_SystemDefault);
-            }
-
-            // Save the new theme preference
-            saveThemePreference(theme);
-
-            // Restart the activity to apply the theme change
-            recreate();
-        }
-    }
-    // Save selected language in SharedPreferences
-    private void saveLanguagePreference(String languageCode) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PREFS_KEY_LANGUAGE, languageCode);
-        editor.apply();
-    }
-
-    // Apply the selected language and restart the activity to apply changes
-    private void applyLanguage(String languageCode) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-        String currentLanguage = sharedPreferences.getString(PREFS_KEY_LANGUAGE, Locale.getDefault().getLanguage());
-
-        // Only apply the language if the selected language is different
-        if (!currentLanguage.equals(languageCode)) {
-            Locale locale = new Locale(languageCode);
-            Locale.setDefault(locale);
-
-            Configuration config = new Configuration();
-            config.locale = locale;
-
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-            // Save the new language preference
-            saveLanguagePreference(languageCode);
-
-            // Restart the activity to apply the language change
-            recreate();
-        }
-    }
-
-
-    // Load preferences (theme and language) on app start
-    private void loadPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-
-        // Load and apply saved theme
-        int savedTheme = sharedPreferences.getInt(PREFS_KEY_THEME, THEME_SYSTEM_DEFAULT);
-        applyTheme(savedTheme);
-
-        // Load and apply saved language
-        String savedLanguage = sharedPreferences.getString(PREFS_KEY_LANGUAGE, Locale.getDefault().getLanguage());
-        applyLanguage(savedLanguage);
-
-        // Update UI elements
-        String[] themes = {"System Default", "Light", "Dark"};
-        tvThemeValue.setText(themes[savedTheme]);
-
-        tvLanguageValue.setText(savedLanguage);
-    }
-
-    // Apply saved theme when the app starts
-    private void applySavedTheme() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-        int savedTheme = sharedPreferences.getInt(PREFS_KEY_THEME, THEME_SYSTEM_DEFAULT);
-        applyTheme(savedTheme);
     }
 }

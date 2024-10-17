@@ -76,7 +76,7 @@ public class HistoryActivity extends AppCompatActivity {
                     etHeartRate.setText("");
 
                     // Display toast message
-                    Toast.makeText(HistoryActivity.this, "New activity added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, "new activity added", Toast.LENGTH_SHORT).show();
 
                     // Reload activity list
                     loadActivities();

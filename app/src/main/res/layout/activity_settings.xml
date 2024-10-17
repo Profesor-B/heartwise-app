@@ -53,77 +53,56 @@
                 android:textSize="20sp" />
         </RelativeLayout>
 
+        <!-- User Name Section -->
         <TextView
-            android:id="@+id/tv_app_appearance"
+            android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="App Appearance"
-            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Welcome, [User Name]"
+            android:textSize="22sp"
             android:fontFamily="@font/poppins_semibold"
-            android:paddingTop="40dp"/>
-        <!-- Theme Settings -->
-        <LinearLayout
-            android:id="@+id/layout_theme"
+            android:textColor="@color/white" />
+
+        <!-- EditText for Adding User Name -->
+        <EditText
+            android:id="@+id/etUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingVertical="12dp"
-            android:clickable="true"
-            android:focusable="true">
+            android:layout_below="@id/tvUserName"
+            android:hint="Enter your name"
+            android:textSize="10sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:inputType="text"
+            android:padding="16dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:layout_marginTop="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Theme"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tv_theme_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Light >"
-                android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="16sp"/>
-        </LinearLayout>
+        <!-- Button to Save User Name -->
+        <Button
+            android:id="@+id/btnSaveUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etUserName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="Save Name"
+            android:fontFamily="@font/poppins_semibold"
+            android:padding="5dp"
+            android:textSize="8sp"
+            app:cornerRadius="12dp" />
 
         <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="5dp"
             android:background="@android:color/darker_gray"/>
 
-        <!-- App Language Settings -->
-        <LinearLayout
-            android:id="@+id/layout_language"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingVertical="12dp"
-            android:clickable="true"
-            android:focusable="true">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="App Language"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tv_language_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="English >"
-                android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="16sp"/>
-        </LinearLayout>
         <TextView
             android:id="@+id/tv_emergency_contacts"
             android:layout_width="wrap_content"
