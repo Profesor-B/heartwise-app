@@ -3,6 +3,7 @@ package com.example.heartwise
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,20 +37,26 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ResultActivity : ComponentActivity() {
 
-    private lateinit var bpmResultDao: BPMResultDao;
+    private lateinit var bpmResultDao: BPMResultDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java,"bpm-result-db").allowMainThreadQueries().build();
+        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "bpm-result-db")
+            .allowMainThreadQueries() // You can use coroutines to remove this for production apps
+            .build()
 
-        bpmResultDao = db.bpmDao();
+        bpmResultDao = db.bpmDao()
 
         enableEdgeToEdge()
         setContent {
@@ -58,6 +65,46 @@ class ResultActivity : ComponentActivity() {
                 bpmResult = bpmResultDao.getAll()
             )
         }
+
+        // Assuming this is where you measure heart rate
+        val measuredBpm = 100 // Simulating a 100 BPM measurement
+        saveBPMResult(measuredBpm)
+    }
+
+    private fun saveBPMResult(bpm: Int) {
+        // Calculate systolic and diastolic based on the BPM
+        val (systolic, diastolic) = calculateBloodPressure(bpm)
+
+        // Create a new BPMResult object with current values
+        val bpmResult = BPMResult(
+            uid = 0, // Room will auto-generate this
+            result = bpm.toString(),
+            timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()),
+            systolic = systolic,
+            diastolic = diastolic
+        )
+
+        // Insert the data into the database using a coroutine
+        lifecycleScope.launch {
+            bpmResultDao.insertData(bpmResult)
+        }
+    }
+
+    // Function to calculate systolic and diastolic based on BPM
+    private fun calculateBloodPressure(bpm: Int): Pair<Int, Int> {
+        val systolic = when {
+            bpm < 100 -> 120
+            bpm in 100..120 -> 130
+            else -> 140
+        }
+
+        val diastolic = when {
+            bpm < 100 -> 80
+            bpm in 100..120 -> 85
+            else -> 90
+        }
+
+        return Pair(systolic, diastolic)
     }
 }
 
@@ -65,7 +112,7 @@ class ResultActivity : ComponentActivity() {
 fun ButtonNavigation(modifier: Modifier = Modifier) {
     AndroidView(
         modifier = modifier,
-        factory = {context ->
+        factory = { context ->
             val bottomNavigationView = BottomNavigationView(context)
             val frameLayout = FrameLayout(context).apply {
                 bottomNavigationView.inflateMenu(R.menu.buttom_navigation_menu)
@@ -73,7 +120,7 @@ fun ButtonNavigation(modifier: Modifier = Modifier) {
                 bottomNavigationView.itemTextColor = ContextCompat.getColorStateList(context, R.color.white)
                 bottomNavigationView.itemIconTintList = ContextCompat.getColorStateList(context, R.color.white)
 
-                bottomNavigationView.setSelectedItemId(R.id.nav_result);
+                bottomNavigationView.setSelectedItemId(R.id.nav_result)
 
                 bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                     when (item.itemId) {
@@ -125,57 +172,89 @@ fun ButtonNavigation(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun getBloodPressureCategory(systolic: Int, diastolic: Int): String {
+    Log.d("BPMCard", "Systolic: $systolic, Diastolic: $diastolic") // Log values
+    return when {
+        systolic < 90 || diastolic < 60 -> "Low"
+        systolic < 120 && diastolic < 80 -> "Normal"
+        systolic in 120..139 || diastolic in 80..89 -> "Prehypertension"
+        systolic in 140..159 || diastolic in 90..99 -> "Stage 1 Hypertension"
+        systolic >= 160 || diastolic >= 100 -> "Stage 2 Hypertension"
+        else -> "Unknown"
+    }
+}
+
+@Composable
 fun BPMCard(bpmResult: BPMResult) {
-    // Define custom FontFamily
     val poppinsSemiBold = FontFamily(Font(R.font.poppins_semibold, FontWeight.SemiBold))
     val poppinsRegular = FontFamily(Font(R.font.poppins_regular))
 
-    // Card composable to represent the Drawable shape
+    val bloodPressureCategory = getBloodPressureCategory(bpmResult.systolic, bpmResult.diastolic)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp), // Equivalent to layout_marginTop in XML
+            .padding(20.dp),
         elevation = CardDefaults.cardElevation(45.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.shadow_grey)),
-        shape = RoundedCornerShape(15.dp) // Adjusted to 25dp to maintain consistency
+        shape = RoundedCornerShape(15.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp), // Padding inside the card for better spacing
+                .padding(20.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Title Text
             Text(
                 text = "Heart Rate History",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp), // Padding bottom for spacing between title and content
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    .padding(bottom = 10.dp),
+                textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontFamily = poppinsSemiBold,
                 color = colorResource(id = R.color.titleTextColor)
             )
 
-            // Timestamp Text
             Text(
                 text = "Date: ${bpmResult.timestamp}",
                 modifier = Modifier
                     .fillMaxWidth(),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 fontFamily = poppinsSemiBold,
                 color = Color.White
             )
 
-            // BPM Result Text
             Text(
                 text = "${bpmResult.result} BPM",
                 modifier = Modifier
                     .fillMaxWidth(),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
                 fontSize = 12.sp,
+                fontFamily = poppinsSemiBold,
+                color = colorResource(id = R.color.white)
+            )
+
+            Text(
+                text = "Systolic: ${bpmResult.systolic} mm Hg, Diastolic: ${bpmResult.diastolic} mm Hg",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                fontFamily = poppinsRegular,
+                color = Color.White
+            )
+
+            Text(
+                text = "Category: $bloodPressureCategory",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 14.sp,
                 fontFamily = poppinsSemiBold,
                 color = colorResource(id = R.color.white)
             )
@@ -185,11 +264,6 @@ fun BPMCard(bpmResult: BPMResult) {
 
 @Composable
 fun MainView(modifier: Modifier = Modifier, bpmResult: List<BPMResult>) {
-    // Define the custom FontFamily
-    val poppinsSemiBold = FontFamily(
-        Font(R.font.poppins_semibold, FontWeight.SemiBold)
-    )
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -224,12 +298,10 @@ fun MainView(modifier: Modifier = Modifier, bpmResult: List<BPMResult>) {
                 color = colorResource(id = R.color.titleTextColor),
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
-                fontFamily = poppinsSemiBold // Apply the custom font here
+                fontFamily = FontFamily(Font(R.font.poppins_semibold, FontWeight.SemiBold))
             )
             Column(
-                modifier = Modifier.padding(
-                    vertical = 15.dp
-                )
+                modifier = Modifier.padding(vertical = 15.dp)
             ) {
                 bpmResult.forEach { item ->
                     BPMCard(item)

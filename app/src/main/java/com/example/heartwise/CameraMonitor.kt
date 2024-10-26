@@ -108,13 +108,15 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
             // get the result and convert it first into toast
             val result = viewBinding.currentBPM.text.split(":")[1].trim()
             // Set current date
-            val currentDate = SimpleDateFormat("MM-dd-yyyy").format(Date())
+            val currentDate = SimpleDateFormat("MMMM-dd-yyyy").format(Date())
             Toast.makeText(applicationContext,"Current bpm: $result",Toast.LENGTH_SHORT).show();
 
             val bpmResult = BPMResult(
                 uid = 0,
                 result = result,
-                timestamp = currentDate
+                timestamp = currentDate,
+                systolic = 0,
+                diastolic = 0
             )
 
             bpmResultDao!!.insertData(bpmResult)
@@ -216,7 +218,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
                                 if(bpm.isNotEmpty()){
                                     viewBinding.currentBPM.text = bpm;
                                     if(isSpeak){
-                                        speakOut("please relax your heart for a moment.");
+                                        speakOut("please relax yourself for a moment.");
                                         tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null);
                                         speakOut("breath normally.");
                                         tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null);

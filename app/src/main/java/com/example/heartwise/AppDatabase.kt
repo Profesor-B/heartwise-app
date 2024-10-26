@@ -12,8 +12,10 @@ import androidx.room.RoomDatabase
 @Entity
 data class BPMResult (
     @PrimaryKey(autoGenerate = true) val uid: Int,
-    @ColumnInfo(name = "result") val result:String,
-    @ColumnInfo(name = "timestamp") val timestamp:String,
+    @ColumnInfo(name = "result") val result: String,
+    @ColumnInfo(name = "timestamp") val timestamp: String,
+    @ColumnInfo(name = "systolic") val systolic: Int,
+    @ColumnInfo(name = "diastolic") val diastolic: Int
 )
 
 @Dao

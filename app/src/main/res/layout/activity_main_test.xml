@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/pink_200"
+        android:gravity="center"
+        tools:context=".MainActivity">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:text="Blood Pressure Monitor"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Start Measurement Button -->
+        <Button
+            android:id="@+id/start_button"
+            android:text="Start Measurement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Camera Preview Placeholder -->
+        <FrameLayout
+            android:id="@+id/preview_layout"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginTop="20dp"
+            android:background="#000000">
+        </FrameLayout>
+
+
+        <!-- Result Display -->
+        <TextView
+            android:id="@+id/result_text"
+            android:text="Your Blood Pressure will appear here."
+            android:textSize="18sp"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
