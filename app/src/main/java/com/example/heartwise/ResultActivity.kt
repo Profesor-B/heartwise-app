@@ -172,14 +172,16 @@ fun ButtonNavigation(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun getBloodPressureCategory(systolic: Int, diastolic: Int): String {
-    Log.d("BPMCard", "Systolic: $systolic, Diastolic: $diastolic") // Log values
+fun getBloodPressureCategory(bpmResult: String): String {
+
+    // convert to double
+    val result = bpmResult.toDouble();
+
     return when {
-        systolic < 90 || diastolic < 60 -> "Low"
-        systolic < 120 && diastolic < 80 -> "Normal"
-        systolic in 120..139 || diastolic in 80..89 -> "Prehypertension"
-        systolic in 140..159 || diastolic in 90..99 -> "Stage 1 Hypertension"
-        systolic >= 160 || diastolic >= 100 -> "Stage 2 Hypertension"
+        result < 120 && result > 70  -> "Normal"
+        result > 120 && result < 130 -> "Elevated"
+        result > 130 && result < 140 -> "High Blood Pressure"
+        result > 140 && result < 180 -> "Hypertension"
         else -> "Unknown"
     }
 }
@@ -189,7 +191,7 @@ fun BPMCard(bpmResult: BPMResult) {
     val poppinsSemiBold = FontFamily(Font(R.font.poppins_semibold, FontWeight.SemiBold))
     val poppinsRegular = FontFamily(Font(R.font.poppins_regular))
 
-    val bloodPressureCategory = getBloodPressureCategory(bpmResult.systolic, bpmResult.diastolic)
+    val bloodPressureCategory = getBloodPressureCategory(bpmResult.result)
 
     Card(
         modifier = Modifier
@@ -236,18 +238,6 @@ fun BPMCard(bpmResult: BPMResult) {
                 fontFamily = poppinsSemiBold,
                 color = colorResource(id = R.color.white)
             )
-
-            Text(
-                text = "Systolic: ${bpmResult.systolic} mm Hg, Diastolic: ${bpmResult.diastolic} mm Hg",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                fontFamily = poppinsRegular,
-                color = Color.White
-            )
-
             Text(
                 text = "Category: $bloodPressureCategory",
                 modifier = Modifier
