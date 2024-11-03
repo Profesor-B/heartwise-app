@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -56,7 +55,9 @@ class ResultActivity : ComponentActivity() {
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "bpm-result-db")
             .allowMainThreadQueries() // You can use coroutines to remove this for production apps
             .build()
+
         bpmResultDao = db.bpmDao()
+
         enableEdgeToEdge()
         setContent {
             MainView(
@@ -65,6 +66,25 @@ class ResultActivity : ComponentActivity() {
             )
         }
 
+    }
+
+    private fun saveBPMResult(bpm: Int) {
+        // Calculate systolic and diastolic based on the BPM
+        val (systolic, diastolic) = calculateBloodPressure(bpm)
+
+        // Create a new BPMResult object with current values
+        val bpmResult = BPMResult(
+            uid = 0, // Room will auto-generate this
+            result = bpm.toString(),
+            timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()),
+            systolic = systolic,
+            diastolic = diastolic
+        )
+
+        // Insert the data into the database using a coroutine
+        lifecycleScope.launch {
+            bpmResultDao.insertData(bpmResult)
+        }
     }
 
     // Function to calculate systolic and diastolic based on BPM
