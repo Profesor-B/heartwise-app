@@ -108,7 +108,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
             // get the result and convert it first into toast
             val result = viewBinding.currentBPM.text.split(":")[1].trim()
             // Set current date
-            val currentDate = SimpleDateFormat("MMMM-dd-yyyy").format(Date())
+            val currentDate = SimpleDateFormat("MMMM-dd-yyyy HH:mm").format(Date())
             Toast.makeText(applicationContext,"Current bpm: $result",Toast.LENGTH_SHORT).show();
 
             val bpmResult = BPMResult(
