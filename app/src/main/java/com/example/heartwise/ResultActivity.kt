@@ -66,9 +66,6 @@ class ResultActivity : ComponentActivity() {
             )
         }
 
-        // Assuming this is where you measure heart rate
-        val measuredBpm = 100 // Simulating a 100 BPM measurement
-        saveBPMResult(measuredBpm)
     }
 
     private fun saveBPMResult(bpm: Int) {
