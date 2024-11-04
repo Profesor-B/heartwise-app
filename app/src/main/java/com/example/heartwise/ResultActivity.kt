@@ -3,7 +3,6 @@ package com.example.heartwise
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -65,10 +66,6 @@ class ResultActivity : ComponentActivity() {
                 bpmResult = bpmResultDao.getAll()
             )
         }
-
-        // Assuming this is where you measure heart rate
-        val measuredBpm = 100 // Simulating a 100 BPM measurement
-        saveBPMResult(measuredBpm)
     }
 
     private fun saveBPMResult(bpm: Int) {
@@ -290,10 +287,14 @@ fun MainView(modifier: Modifier = Modifier, bpmResult: List<BPMResult>) {
                 textAlign = TextAlign.Center,
                 fontFamily = FontFamily(Font(R.font.poppins_semibold, FontWeight.SemiBold))
             )
-            Column(
-                modifier = Modifier.padding(vertical = 15.dp)
+
+            // Wrapping the BPMCard list in LazyColumn for scrollability
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 15.dp)
             ) {
-                bpmResult.forEach { item ->
+                items(bpmResult) { item ->
                     BPMCard(item)
                 }
             }
