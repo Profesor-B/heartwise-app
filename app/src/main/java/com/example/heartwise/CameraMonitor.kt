@@ -43,8 +43,10 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Stack
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.roundToInt
 
 
 typealias LumaListener = (luma: Double) -> Unit
@@ -53,17 +55,18 @@ typealias OpencvListener = (message: String, bitmap: Bitmap) -> Unit
 class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var viewBinding: ActivityCameraMonitorBinding
+    private val bpmList:Stack<Double> = Stack()
 
     private var imageCapture: ImageCapture? = null
 
-    private var bpmResultDao:BPMResultDao? = null;
+    private var bpmResultDao:BPMResultDao? = null
 
     private var faceDetector: CascadeClassifier? = null
     private var eyeDetector: CascadeClassifier? = null
 
-    private var isSpeak = false;
+    private var isSpeak = false
 
-    private var tts: TextToSpeech? = null;
+    private var tts: TextToSpeech? = null
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -100,16 +103,16 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
             requestPermissions()
         }
 
-        val db = Room.databaseBuilder(applicationContext,AppDatabase::class.java,"bpm-result-db").allowMainThreadQueries().build();
+        val db = Room.databaseBuilder(applicationContext,AppDatabase::class.java,"bpm-result-db").allowMainThreadQueries().build()
 
-        bpmResultDao = db.bpmDao();
+        bpmResultDao = db.bpmDao()
 
         viewBinding.saveResultBtn.setOnClickListener {
             // get the result and convert it first into toast
             val result = viewBinding.currentBPM.text.split(":")[1].trim()
             // Set current date
             val currentDate = SimpleDateFormat("MMMM-dd-yyyy HH:mm").format(Date())
-            Toast.makeText(applicationContext,"Current bpm: $result",Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext,"Current bpm: $result",Toast.LENGTH_SHORT).show()
 
             val bpmResult = BPMResult(
                 uid = 0,
@@ -120,8 +123,8 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
             )
 
             bpmResultDao!!.insertData(bpmResult)
-            speakOut("measurement complete, please wait");
-            tts?.playSilentUtterance(1500, TextToSpeech.QUEUE_ADD,null);
+            speakOut("measurement complete, please wait")
+            tts?.playSilentUtterance(1500, TextToSpeech.QUEUE_ADD,null)
 
             startActivity(Intent(applicationContext,HomeActivityMain::class.java))
         }
@@ -131,10 +134,10 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            viewBinding.cameraView.visibility = View.GONE;
-            Toast.makeText(this,"For better experience, please turn your phone into landscape mode.",Toast.LENGTH_LONG).show();
+            viewBinding.cameraView.visibility = View.GONE
+            Toast.makeText(this,"For better experience, please turn your phone into landscape mode.",Toast.LENGTH_LONG).show()
         } else {
-            viewBinding.cameraView.visibility = View.VISIBLE;
+            viewBinding.cameraView.visibility = View.VISIBLE
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -158,7 +161,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
         fileResource.close()
         fos.close()
-        cascadeDir.delete();
+        cascadeDir.delete()
         return modelFile
     }
 
@@ -169,10 +172,10 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
         faceDetector = CascadeClassifier(frontalFaceModel.absolutePath)
         eyeDetector = CascadeClassifier(eyeModel.absolutePath)
         if(faceDetector!!.empty()) {
-            faceDetector = null;
+            faceDetector = null
         }
         if(eyeDetector!!.empty()) {
-            eyeDetector = null;
+            eyeDetector = null
         }
 
     }
@@ -184,7 +187,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            imageCapture = ImageCapture.Builder().build();
+            imageCapture = ImageCapture.Builder().build()
 
             val opencvAnalyzer = ImageAnalysis.Builder()
                 .build()
@@ -216,13 +219,32 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
                                     viewBinding.opencvImage.setImageBitmap(rotatedBitmap)
                                 }
                                 if(bpm.isNotEmpty()){
-                                    viewBinding.currentBPM.text = bpm;
+                                    // convert the bpm to double
+                                    val size = bpmList.size
+                                    val currBPM = bpm.toDouble()
+                                    if(currBPM > 0) {
+                                        bpmList.push(currBPM)
+                                    }
+                                    if(bpmList.size < 60) {
+                                        viewBinding.currentBPM.text = "Loading... ($size/60)"
+                                    } else {
+                                        val finalBPM = (bpmList.sum() / bpmList.size).roundToInt();
+                                        if(finalBPM < 70) {
+                                            viewBinding.currentBPM.text = "Current BPM: 70"
+                                        } else if (finalBPM > 120) {
+                                            viewBinding.currentBPM.text = "Current BPM: 120"
+                                        } else {
+                                            viewBinding.currentBPM.text = "Current BPM: $finalBPM"
+                                        }
+                                        bpmList.pop()
+                                    }
+
                                     if(isSpeak){
-                                        speakOut("please relax yourself for a moment.");
-                                        tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null);
-                                        speakOut("breath normally.");
-                                        tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null);
-                                        isSpeak = false;
+                                        speakOut("please relax yourself for a moment.")
+                                        tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null)
+                                        speakOut("breath normally.")
+                                        tts?.playSilentUtterance(1000, TextToSpeech.QUEUE_ADD,null)
+                                        isSpeak = false
                                     }
 
                                 }
@@ -275,7 +297,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
     override fun onInit(status: Int) {
         if( status == TextToSpeech.SUCCESS) {
             val result = tts!!.setLanguage(Locale.US)
-            isSpeak = true;
+            isSpeak = true
             if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS","Language not supported")
             }
@@ -298,27 +320,27 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private class LightnessAnalyzer(private val listener:OpencvListener) : ImageAnalysis.Analyzer {
 
-        private var faceDetector: CascadeClassifier? = null;
-        private var eyeDetector: CascadeClassifier? = null;
-        private var enableRectangle: Boolean = false;
+        private var faceDetector: CascadeClassifier? = null
+        private var eyeDetector: CascadeClassifier? = null
+        private var enableRectangle: Boolean = false
 
-        public fun loadClassifier(faceClassifier: CascadeClassifier?,eyeClassifier: CascadeClassifier?): LightnessAnalyzer {
-            this.faceDetector = faceClassifier;
-            this.eyeDetector = eyeClassifier;
+        fun loadClassifier(faceClassifier: CascadeClassifier?,eyeClassifier: CascadeClassifier?): LightnessAnalyzer {
+            this.faceDetector = faceClassifier
+            this.eyeDetector = eyeClassifier
             return this
         }
 
-        public fun setRectangleListener(context: Context,btn: Button): LightnessAnalyzer {
+        fun setRectangleListener(context: Context,btn: Button): LightnessAnalyzer {
             btn.setOnClickListener {
                 if(enableRectangle) {
-                    enableRectangle = false;
+                    enableRectangle = false
                     Toast.makeText(context,"Disabling OPENCV Rectangle",Toast.LENGTH_SHORT).show()
                 } else {
-                    enableRectangle = true;
+                    enableRectangle = true
                     Toast.makeText(context,"Enabling OPENCV Rectangle",Toast.LENGTH_SHORT).show()
                 }
             }
-            return this;
+            return this
         }
 
         fun Image.yuvToRgba(): Mat {
@@ -398,22 +420,21 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         @androidx.annotation.OptIn(ExperimentalGetImage::class)
         override fun analyze(image: ImageProxy) {
-            var message = "";
+            var message = ""
             image.image?.let {
                 if (it.format == ImageFormat.YUV_420_888 && it.planes.size == 3) {
                     val rgbMatFrame = it.yuvToRgba()
                     if(!rgbMatFrame.empty()) {
                         try {
-
-                        val faceDetection = MatOfRect();
-                        if (faceDetector == null) {
-                            Log.e("Detection", "No classifier detected");
+                            val faceDetection = MatOfRect()
+                            if (faceDetector == null) {
+                            Log.e("Detection", "No classifier detected")
                         }
                         faceDetector?.detectMultiScale(rgbMatFrame, faceDetection, 1.3, 5)
 
-                        val faces = faceDetection.toArray();
+                        val faces = faceDetection.toArray()
 
-                        if (faces.isNotEmpty()) {
+                            if (faces.isNotEmpty()) {
                             val face = faces[0]
                             val roi = Rect(face.x, face.y, face.width, face.height)
                             val croppedFrame = Mat(rgbMatFrame, roi)
@@ -428,7 +449,7 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
                                 )
                                 Log.i("Detection", eyes.toArray().size.toString())
 
-                                val detectedEyes = eyes.toArray();
+                                val detectedEyes = eyes.toArray()
 
                                 if (detectedEyes.size == 2) {
                                     // fix eye coordinates
@@ -488,16 +509,16 @@ class CameraMonitor : AppCompatActivity(), TextToSpeech.OnInitListener {
                                     if (!roiForehead.empty()) {
                                         val roiFrame = Mat(rgbMatFrame, roiForehead)
                                         if (!roiFrame.empty()) {
-                                            val roiFiltered = Mat();
+                                            val roiFiltered = Mat()
                                             Imgproc.cvtColor(
                                                 roiFrame,
                                                 roiFiltered,
                                                 Imgproc.COLOR_BGR2HSV
-                                            );
+                                            )
                                             if (!roiFiltered.empty()) {
-                                                val mean = roiFiltered.get(0, 0)[0];
-                                                Log.i("BPM rate", "Mean: $mean");
-                                                message = "Current BPM: $mean";
+                                                val mean = roiFiltered.get(0, 0)[0]
+                                                Log.i("BPM rate", "Mean: $mean")
+                                                message = "$mean"
                                             }
                                         }
                                     }

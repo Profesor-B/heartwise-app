@@ -54,6 +54,7 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.runtime.android)
+    implementation(project(":opencv"))
     androidTestImplementation(libs.ui.test.junit4)
     val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
     implementation(libs.androidx.ui.tooling.preview)
@@ -83,7 +84,6 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.activity)
-    implementation(project(":opencv"))
     implementation(libs.preference)
     implementation(libs.room.common)
     implementation(libs.room.runtime)
