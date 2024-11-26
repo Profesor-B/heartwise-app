@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -175,7 +177,7 @@ fun getBloodPressureCategory(bpmResult: String): String {
     val result = bpmResult.toDouble();
 
     return when {
-        result < 120 && result > 70  -> "Normal"
+        result < 120 && result >= 70  -> "Normal"
         result > 120 && result < 130 -> "Elevated"
         result > 130 && result < 140 -> "High Blood Pressure"
         result > 140 && result < 180 -> "Hypertension"
@@ -251,6 +253,7 @@ fun BPMCard(bpmResult: BPMResult) {
 
 @Composable
 fun MainView(modifier: Modifier = Modifier, bpmResult: List<BPMResult>) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -288,7 +291,7 @@ fun MainView(modifier: Modifier = Modifier, bpmResult: List<BPMResult>) {
                 fontFamily = FontFamily(Font(R.font.poppins_semibold, FontWeight.SemiBold))
             )
             Column(
-                modifier = Modifier.padding(vertical = 15.dp)
+                modifier = Modifier.padding(vertical = 15.dp).verticalScroll(scrollState)
             ) {
                 bpmResult.forEach { item ->
                     BPMCard(item)
